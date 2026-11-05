@@ -2,17 +2,64 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-const verbs = ['Go','Eat','See','Play','Write','Buy','Run','Drink','Make','Come','Take','Give','Speak','Swim','Have','Find','Get','Sleep','Read','Sing','Drive','Break','Choose','Fly','Know','Teach','Think','Catch','Bring','Begin']
-const answers = ['went','ate','saw','played','wrote','bought','ran','drank','made','came','took','gave','spoke','swam','had','found','got','slept','read','sang','drove','broke','chose','flew','knew','taught','thought','caught','brought','began']
+const verbs = [
+  'Go', 'Eat', 'See', 'Play', 'Write', 'Buy',
+  'Run', 'Drink', 'Make', 'Come', 'Take', 'Give',
+  'Speak', 'Swim', 'Have', 'Find', 'Get', 'Sleep',
+  'Read', 'Sing', 'Drive', 'Break', 'Choose',
+  'Fly', 'Know', 'Teach', 'Think', 'Catch',
+  'Bring', 'Begin'
+]
 
-// One source of truth for the rules AND the graphics.
+const answers = [
+  'went', 'ate', 'saw', 'played', 'wrote', 'bought',
+  'ran', 'drank', 'made', 'came', 'took', 'gave',
+  'spoke', 'swam', 'had', 'found', 'got', 'slept',
+  'read', 'sang', 'drove', 'broke', 'chose',
+  'flew', 'knew', 'taught', 'thought', 'caught',
+  'brought', 'began'
+]
+
+const STEP_TIME = 550
+const ROLL_TIME = 1500
+
 const connections = [
   { type: 'ladder', from: 5, to: 12 },
   { type: 'ladder', from: 7, to: 18 },
   { type: 'ladder', from: 14, to: 25 },
-  { type: 'snake', from: 11, to: 2, file: '/snake1.png', x: 107, y: 305, width: 114, height: 163, angle: -20 },
-  { type: 'snake', from: 22, to: 9, file: '/snake2.png', x: 237, y: 155, width: 131, height: 199, angle: 25 },
-  { type: 'snake', from: 29, to: 19, file: '/snake3.png', x: 425, y: 35, width: 134, height: 175, angle: -25 },
+  {
+    type: 'snake',
+    from: 11,
+    to: 2,
+    file: '/snake1.png',
+    x: 107,
+    y: 305,
+    width: 114,
+    height: 163,
+    angle: -20
+  },
+  {
+    type: 'snake',
+    from: 22,
+    to: 9,
+    file: '/snake2.png',
+    x: 237,
+    y: 155,
+    width: 131,
+    height: 199,
+    angle: 25
+  },
+  {
+    type: 'snake',
+    from: 29,
+    to: 19,
+    file: '/snake3.png',
+    x: 425,
+    y: 35,
+    width: 134,
+    height: 175,
+    angle: -25
+  }
 ]
 
 const connectionAt = Object.fromEntries(
@@ -25,6 +72,7 @@ const boardRows = Array.from({ length: 5 }, (_, index) => {
     { length: 6 },
     (_, col) => row * 6 + col + 1
   )
+
   return row % 2 === 0 ? numbers : numbers.reverse()
 })
 
@@ -39,6 +87,8 @@ function centerOf(number) {
   }
 }
 
+// BOARD ART: SNAKES AND IMPROVED WOODEN LADDERS
+
 function BoardArt() {
   return (
     <svg
@@ -50,8 +100,18 @@ function BoardArt() {
       {connections
         .filter(c => c.type === 'ladder')
         .map(({ from, to }) => {
-          const a = centerOf(from)
-          const b = centerOf(to)
+          const start = centerOf(from)
+          const end = centerOf(to)
+
+          const a = {
+            x: start.x + 25,
+            y: start.y + 15
+          }
+
+          const b = {
+            x: end.x + 25,
+            y: end.y - 15
+          }
 
           const dx = b.x - a.x
           const dy = b.y - a.y
@@ -59,33 +119,78 @@ function BoardArt() {
           const px = -dy / len
           const py = dx / len
 
+          const railWidth = 8
+          const stepCount = Math.max(
+            3,
+            Math.floor(len / 25)
+          )
+
           return (
             <g key={from}>
-              {[-10, 10].map(offset => (
+              {/* Dark wooden outlines */}
+              {[-railWidth, railWidth].map(offset => (
                 <line
-                  key={offset}
+                  key={`outline-${offset}`}
                   x1={a.x + px * offset}
                   y1={a.y + py * offset}
                   x2={b.x + px * offset}
                   y2={b.y + py * offset}
-                  stroke="#89502b"
-                  strokeWidth="9"
+                  stroke="#80502b"
+                  strokeWidth="8"
                   strokeLinecap="round"
                 />
               ))}
 
-              {[.12, .27, .42, .57, .72, .87].map(t => (
+              {/* Light wooden rails */}
+              {[-railWidth, railWidth].map(offset => (
                 <line
-                  key={t}
-                  x1={a.x + dx * t + px * 10}
-                  y1={a.y + dy * t + py * 10}
-                  x2={a.x + dx * t - px * 10}
-                  y2={a.y + dy * t - py * 10}
-                  stroke="#f7c376"
-                  strokeWidth="7"
+                  key={`rail-${offset}`}
+                  x1={a.x + px * offset}
+                  y1={a.y + py * offset}
+                  x2={b.x + px * offset}
+                  y2={b.y + py * offset}
+                  stroke="#c78b47"
+                  strokeWidth="5"
                   strokeLinecap="round"
                 />
               ))}
+
+              {/* Wooden rungs */}
+              {Array.from(
+                { length: stepCount },
+                (_, i) => {
+                  const t = (i + 1) / (stepCount + 1)
+
+                  return (
+                    <line
+                      key={`step-${i}`}
+                      x1={
+                        a.x +
+                        dx * t +
+                        px * railWidth
+                      }
+                      y1={
+                        a.y +
+                        dy * t +
+                        py * railWidth
+                      }
+                      x2={
+                        a.x +
+                        dx * t -
+                        px * railWidth
+                      }
+                      y2={
+                        a.y +
+                        dy * t -
+                        py * railWidth
+                      }
+                      stroke="#f4c47c"
+                      strokeWidth="7"
+                      strokeLinecap="round"
+                    />
+                  )
+                }
+              )}
             </g>
           )
         })}
@@ -101,10 +206,170 @@ function BoardArt() {
             width={c.width}
             height={c.height}
             preserveAspectRatio="xMidYMid meet"
-            transform={`rotate(${c.angle} ${c.x + c.width / 2} ${c.y + c.height / 2})`}
+            transform={`rotate(${c.angle} ${
+              c.x + c.width / 2
+            } ${c.y + c.height / 2})`}
           />
         ))}
     </svg>
+  )
+}
+
+// 3D DICE
+
+
+function Dice3D({ value, rolling }) {
+  const rotations = {
+    1: 'rotateX(0deg) rotateY(0deg)',
+    2: 'rotateX(-90deg) rotateY(0deg)',
+    3: 'rotateX(0deg) rotateY(-90deg)',
+    4: 'rotateX(0deg) rotateY(90deg)',
+    5: 'rotateX(90deg) rotateY(0deg)',
+    6: 'rotateX(0deg) rotateY(180deg)'
+  }
+
+  const faces = [
+    { number: 1, side: 'front', dots: [4] },
+    { number: 6, side: 'back', dots: [0, 2, 3, 5, 6, 8] },
+    { number: 3, side: 'right', dots: [0, 4, 8] },
+    { number: 4, side: 'left', dots: [0, 2, 6, 8] },
+    { number: 2, side: 'top', dots: [0, 8] },
+    { number: 5, side: 'bottom', dots: [0, 2, 4, 6, 8] }
+  ]
+
+  return (
+    <div className="real-dice-stage">
+      <div
+        className={`real-dice ${
+          rolling ? 'real-dice-rolling' : ''
+        }`}
+        style={{
+          '--dice-final-rotation': rotations[value]
+        }}
+        role="img"
+        aria-label={`Dice showing ${value}`}
+      >
+        {faces.map(face => (
+          <div
+            key={face.number}
+            className={`real-dice-face dice-${face.side}`}
+          >
+            <div className="dice-pips">
+              {Array.from({ length: 9 }, (_, index) => (
+                <span
+                  key={index}
+                  className={
+                    face.dots.includes(index)
+                      ? 'dice-pip'
+                      : 'dice-pip empty'
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+
+// ANIMATED ANSWER CELEBRATION
+
+function AnswerCelebration({ question, onClose }) {
+  const confettiColors = [
+    '#ffd700',
+    '#ff6b6b',
+    '#4ade80',
+    '#60a5fa',
+    '#c084fc'
+  ]
+
+  return (
+    <div
+      className="celebration-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Teacher answer reveal"
+    >
+      <div className="celebration-card">
+        <div
+          className="confetti-container"
+          aria-hidden="true"
+        >
+          {Array.from({ length: 35 }, (_, i) => (
+            <span
+              key={i}
+              className="confetti-piece"
+              style={{
+                left: `${(i * 37) % 100}%`,
+                animationDelay: `${(i % 10) * -0.22}s`,
+                animationDuration: `${
+                  2 + (i % 5) * 0.25
+                }s`,
+                backgroundColor:
+                  confettiColors[
+                    i % confettiColors.length
+                  ]
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="celebration-star star-one">
+          ⭐
+        </div>
+
+        <div className="celebration-star star-two">
+          ✨
+        </div>
+
+        <div className="celebration-star star-three">
+          🌟
+        </div>
+
+        <div className="celebration-star star-four">
+          ⭐
+        </div>
+
+        <div className="celebration-heading">
+          🎉 ANSWER REVEAL! 🎉
+        </div>
+
+        <div className="celebration-subtitle">
+          🌿 JUNGLE WORD CHALLENGE 🌿
+        </div>
+
+        <div className="celebration-original">
+          {verbs[question - 1]}
+        </div>
+
+        <div className="celebration-arrow">
+          ⬇
+        </div>
+
+        <div className="celebration-answer-box">
+          <div className="celebration-answer-label">
+            ✨ THE CORRECT ANSWER ✨
+          </div>
+
+          <div className="celebration-answer">
+            {answers[question - 1]}
+          </div>
+        </div>
+
+        <div className="celebration-footer">
+          ⭐ GREAT LEARNING! ⭐
+        </div>
+
+        <button
+          className="celebration-close"
+          onClick={onClose}
+        >
+          ✓ BACK TO THE GAME
+        </button>
+      </div>
+    </div>
   )
 }
 
@@ -121,7 +386,7 @@ export default function App() {
   const [rolling, setRolling] = useState(false)
   const [moving, setMoving] = useState(false)
   const [question, setQuestion] = useState(null)
-  const [showAnswer, setShowAnswer] = useState(false)
+  const [answerPopup, setAnswerPopup] = useState(false)
   const [message, setMessage] = useState(
     'Team 1, roll the dice to begin!'
   )
@@ -164,7 +429,7 @@ export default function App() {
     setRolling(false)
     setMoving(false)
     setQuestion(null)
-    setShowAnswer(false)
+    setAnswerPopup(false)
     setWinner(null)
     setMessage('Team 1, roll the dice to begin!')
   }
@@ -174,13 +439,18 @@ export default function App() {
 
     const current = teams[turn].position
     const result = Math.floor(Math.random() * 6) + 1
-    const destination = Math.min(30, current + result)
+    const destination = Math.min(
+      30,
+      current + result
+    )
 
+    setDice(result)
     setRolling(true)
-    setMessage(`${teams[turn].name} is rolling...`)
+    setMessage(
+      `${teams[turn].name} is rolling...`
+    )
 
     schedule(() => {
-      setDice(result)
       setRolling(false)
       setMoving(true)
 
@@ -199,32 +469,38 @@ export default function App() {
           )
 
           if (square === destination) {
-            setMoving(false)
-            setQuestion(square)
-            setShowAnswer(false)
-
-            setMessage(
-              `${teams[turn].name}, say the past tense of “${verbs[square - 1]}”!`
-            )
+            schedule(() => {
+              setMoving(false)
+              setQuestion(square)
+              setAnswerPopup(false)
+              setMessage(
+                `${teams[turn].name}, say the past tense of "${verbs[square - 1]}"!`
+              )
+            }, STEP_TIME)
           }
-        }, (square - current) * 250)
+        }, (square - current) * STEP_TIME)
       }
-    }, 650)
+    }, ROLL_TIME)
   }
 
   function finishTurn(correct) {
-    if (question === null) return
+    if (
+      question === null ||
+      moving ||
+      answerPopup
+    ) {
+      return
+    }
 
     const square = question
     const special = connectionAt[square]
 
     let destination = square
+
     let feedback = correct
       ? 'Great answer!'
-      : `The answer is “${answers[square - 1]}”.`
+      : `The answer is "${answers[square - 1]}".`
 
-    // Landing on a snake slides down;
-    // landing on a ladder climbs up.
     if (special) {
       destination = special.to
 
@@ -234,28 +510,47 @@ export default function App() {
     }
 
     setQuestion(null)
-    setShowAnswer(false)
+    setAnswerPopup(false)
+
+    if (special) {
+      setMoving(true)
+    }
 
     setTeams(prev =>
       prev.map((team, i) =>
         i === turn
-          ? { ...team, position: destination }
+          ? {
+              ...team,
+              position: destination
+            }
           : team
       )
     )
 
-    if (destination === 30) {
-      setWinner(turn)
-      setMessage(`🏆 ${teams[turn].name} wins!`)
-      return
+    function completeTurn() {
+      if (destination === 30) {
+        setWinner(turn)
+        setMessage(
+          `🏆 ${teams[turn].name} wins!`
+        )
+        setMoving(false)
+        return
+      }
+
+      const next = (turn + 1) % teams.length
+
+      setTurn(next)
+      setMessage(
+        `${feedback} ${teams[next].name}, you're up!`
+      )
+      setMoving(false)
     }
 
-    const next = (turn + 1) % teams.length
-
-    setTurn(next)
-    setMessage(
-      `${feedback} ${teams[next].name}, you're up!`
-    )
+    if (special) {
+      schedule(completeTurn, 900)
+    } else {
+      completeTurn()
+    }
   }
 
   return (
@@ -312,12 +607,16 @@ export default function App() {
             </div>
           </section>
 
-          <section className="games-section" id="games">
+          <section
+            className="games-section"
+            id="games"
+          >
             <div className="section-heading">
               <div>
                 <span className="small-heading">
                   CHOOSE AN ADVENTURE
                 </span>
+
                 <h2>Classroom Games</h2>
               </div>
 
@@ -328,15 +627,21 @@ export default function App() {
 
             <div className="game-grid">
               <article className="game-card">
-                <div className="game-icon">🐍🪜</div>
+                <div className="game-icon">
+                  🐍🪜
+                </div>
+
                 <span className="game-category">
                   GRAMMAR & VOCABULARY
                 </span>
+
                 <h3>Snakes & Ladders</h3>
+
                 <p>
                   Roll, race and practise irregular
                   past-tense verbs.
                 </p>
+
                 <button
                   className="play-button"
                   onClick={() => setPage('game')}
@@ -346,31 +651,48 @@ export default function App() {
               </article>
 
               <article className="game-card">
-                <div className="game-icon">🏝️</div>
+                <div className="game-icon">
+                  🏝️
+                </div>
+
                 <h3>Treasure Island</h3>
-                <p>A new adventure is coming soon.</p>
+
+                <p>
+                  A new adventure is coming soon.
+                </p>
+
                 <span className="coming-soon">
                   Coming soon
                 </span>
               </article>
 
               <article className="game-card">
-                <div className="game-icon">🏁</div>
+                <div className="game-icon">
+                  🏁
+                </div>
+
                 <h3>English Race</h3>
+
                 <p>
                   Race your classmates to the finish line.
                 </p>
+
                 <span className="coming-soon">
                   Coming soon
                 </span>
               </article>
 
               <article className="game-card">
-                <div className="game-icon">💬</div>
+                <div className="game-icon">
+                  💬
+                </div>
+
                 <h3>Word Challenge</h3>
+
                 <p>
                   Build vocabulary with quick-fire questions.
                 </p>
+
                 <span className="coming-soon">
                   Coming soon
                 </span>
@@ -379,9 +701,13 @@ export default function App() {
           </section>
 
           <section className="custom-section">
-            <div className="custom-icon">✨</div>
+            <div className="custom-icon">
+              ✨
+            </div>
+
             <div>
               <h2>Make the game your own!</h2>
+
               <p>
                 Custom classroom games are on the way.
                 Choose your topic and challenge your students.
@@ -393,11 +719,14 @@ export default function App() {
             className="membership-section"
             id="membership"
           >
-            <h2>Something for every classroom</h2>
+            <h2>
+              Something for every classroom
+            </h2>
 
             <div className="membership-grid">
               <div>
                 <h3>🌟 Free</h3>
+
                 <p>
                   Play ready-made games and, when custom
                   games launch, create one per month.
@@ -405,7 +734,10 @@ export default function App() {
               </div>
 
               <div>
-                <h3>👑 Premium — coming later</h3>
+                <h3>
+                  👑 Premium — coming later
+                </h3>
+
                 <p>
                   More custom games, editing and
                   saved activities.
@@ -415,8 +747,13 @@ export default function App() {
           </section>
 
           <footer>
-            <strong>🎲 English Game Hub</strong>
-            <p>Made for playful English learning.</p>
+            <strong>
+              🎲 English Game Hub
+            </strong>
+
+            <p>
+              Made for playful English learning.
+            </p>
           </footer>
         </>
       ) : (
@@ -432,7 +769,10 @@ export default function App() {
           <div className="game-top">
             <button
               className="back-button"
-              onClick={() => setPage('home')}
+              onClick={() => {
+                setAnswerPopup(false)
+                setPage('home')
+              }}
             >
               ← Back to Games
             </button>
@@ -456,8 +796,13 @@ export default function App() {
           <div className="game-layout">
             <section className="board-shell">
               <div className="board-banner">
-                <span>🌟 RACE TO 30!</span>
-                <span>🏆 FINISH LINE</span>
+                <span>
+                  🌟 RACE TO 30!
+                </span>
+
+                <span>
+                  🏆 FINISH LINE
+                </span>
               </div>
 
               <div className="board">
@@ -484,24 +829,36 @@ export default function App() {
                           🏆
                         </span>
                       )}
-
-                      <div className="pieces">
-                        {teams.map((team, i) =>
-                          team.position === number ? (
-                            <span
-                              key={i}
-                              title={team.name}
-                            >
-                              {team.emoji}
-                            </span>
-                          ) : null
-                        )}
-                      </div>
                     </div>
                   ))}
                 </div>
 
                 <BoardArt />
+
+                <div className="explorer-layer">
+                  {teams.map((team, i) => {
+                    const pos =
+                      team.position === 0
+                        ? { x: 50, y: 550 }
+                        : centerOf(team.position)
+
+                    return (
+                      <div
+                        key={i}
+                        className={`explorer explorer-${i}`}
+                        style={{
+                          left: `${pos.x / 6}%`,
+                          top: `${pos.y / 5}%`
+                        }}
+                        title={team.name}
+                      >
+                        <span className="explorer-character">
+                          🧑‍🚀
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
 
               <div className="board-footer">
@@ -520,14 +877,17 @@ export default function App() {
                 <h2>Current Turn</h2>
 
                 <div className="active-team">
-                  {teams[turn].emoji} {teams[turn].name}
+                  {teams[turn].emoji}{' '}
+                  {teams[turn].name}
                 </div>
 
                 <div className="team-list">
                   {teams.map((team, i) => (
                     <div
                       className={`team-pill ${
-                        i === turn ? 'selected' : ''
+                        i === turn
+                          ? 'selected'
+                          : ''
                       }`}
                       key={i}
                     >
@@ -535,7 +895,9 @@ export default function App() {
                         {team.emoji} {team.name}
                       </span>
 
-                      <b>{team.position}/30</b>
+                      <b>
+                        {team.position}/30
+                      </b>
                     </div>
                   ))}
                 </div>
@@ -546,17 +908,10 @@ export default function App() {
                   🎲 TIME TO ROLL!
                 </span>
 
-                <div
-                  className={`big-dice ${
-                    rolling ? 'dice-rolling' : ''
-                  }`}
-                >
-                  {
-                    ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][
-                      dice - 1
-                    ]
-                  }
-                </div>
+                <Dice3D
+                  value={dice}
+                  rolling={rolling}
+                />
 
                 <button
                   className="roll-button"
@@ -579,62 +934,72 @@ export default function App() {
                 💬 {message}
               </section>
 
-              {question !== null && (
-                <section className="question-panel">
-                  <span className="panel-eyebrow">
-                    ✨ ENGLISH CHALLENGE
-                  </span>
+              <section className="question-panel">
+                <span className="panel-eyebrow">
+                  ✨ ENGLISH CHALLENGE
+                </span>
 
-                  <p>
-                    What is the past simple of...
-                  </p>
+                {question !== null ? (
+                  <>
+                    <p>
+                      What is the past simple of...
+                    </p>
 
-                  <div className="challenge-word">
-                    {verbs[question - 1]}
-                  </div>
-
-                  <button
-                    className="reveal-button"
-                    onClick={() =>
-                      setShowAnswer(v => !v)
-                    }
-                  >
-                    {showAnswer
-                      ? 'Hide answer'
-                      : '👀 Show teacher answer'}
-                  </button>
-
-                  {showAnswer && (
-                    <div className="answer-reveal">
-                      {answers[question - 1]}
+                    <div className="challenge-word">
+                      {verbs[question - 1]}
                     </div>
-                  )}
-
-                  <div className="answer-buttons">
-                    <button
-                      className="correct-button"
-                      onClick={() => finishTurn(true)}
-                    >
-                      ✓ CORRECT
-                    </button>
 
                     <button
-                      className="incorrect-button"
-                      onClick={() => finishTurn(false)}
+                      className="reveal-button"
+                      onClick={() =>
+                        setAnswerPopup(true)
+                      }
                     >
-                      ✕ INCORRECT
+                      ✨ REVEAL THE ANSWER! ✨
                     </button>
+
+                    <div className="answer-buttons">
+                      <button
+                        className="correct-button"
+                        onClick={() =>
+                          finishTurn(true)
+                        }
+                      >
+                        ✓ CORRECT
+                      </button>
+
+                      <button
+                        className="incorrect-button"
+                        onClick={() =>
+                          finishTurn(false)
+                        }
+                      >
+                        ✕ INCORRECT
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="challenge-placeholder">
+                    {winner !== null
+                      ? '🏆 Game finished!'
+                      : moving
+                      ? '🚶 Explorer is moving...'
+                      : '🎲 Roll the dice to get a question!'}
                   </div>
-                </section>
-              )}
+                )}
+              </section>
 
               {winner !== null && (
                 <section className="winner-panel">
                   🏆
+
                   <h2>
                     {teams[winner].name} wins!
                   </h2>
-                  <p>Fantastic teamwork!</p>
+
+                  <p>
+                    Fantastic teamwork!
+                  </p>
                 </section>
               )}
 
@@ -646,6 +1011,15 @@ export default function App() {
               </button>
             </aside>
           </div>
+
+          {answerPopup && question !== null && (
+            <AnswerCelebration
+              question={question}
+              onClose={() =>
+                setAnswerPopup(false)
+              }
+            />
+          )}
         </main>
       )}
     </div>
