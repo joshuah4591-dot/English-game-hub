@@ -2,7 +2,9 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
+// ==================================================
 // GAME TOPICS
+// ==================================================
 
 const gameTopics = {
   pastTense: {
@@ -51,14 +53,78 @@ const gameTopics = {
       'cheap', 'unhealthy', 'careless',
       'boring', 'selfish'
     ]
+  },
+
+  gerundsInfinitives: {
+    title: 'Gerunds & Infinitives',
+    subtitle: 'Complete the sentence!',
+    question: 'Complete the sentence:',
+    instruction: 'Complete the sentence',
+    words: [
+      'Want', 'Enjoy', 'Decide', 'Finish', 'Hope',
+      'Avoid', 'Promise', 'Keep', 'Need', 'Suggest',
+      'Agree', 'Miss', 'Plan', 'Practise', 'Refuse',
+      'Dislike', 'Offer', 'Consider', 'Expect', 'Admit',
+      'Choose', 'Discuss', 'Manage', 'Imagine',
+      'Learn', 'Recommend', 'Wish', 'Mind',
+      'Prepare', 'Risk'
+    ],
+    sentences: [
+      'I want ______ (play) football.',
+      'She enjoys ______ (dance).',
+      'He decided ______ (leave) early.',
+      'They finished ______ (eat) dinner.',
+      'We hope ______ (win) the game.',
+      'I avoid ______ (run) in the rain.',
+      'She promised ______ (help) me.',
+      'He keeps ______ (talk) in class.',
+      'I need ______ (study) tonight.',
+      'They suggested ______ (walk) home.',
+      'She agreed ______ (come) with us.',
+      'I miss ______ (play) with my friends.',
+      'He plans ______ (travel) to Japan.',
+      'We practised ______ (sing) the song.',
+      'She refused ______ (answer) the question.',
+      'He dislikes ______ (cook).',
+      'I offered ______ (carry) the bag.',
+      'They considered ______ (move) house.',
+      'I expect ______ (pass) the test.',
+      'She admitted ______ (lie) to her teacher.',
+      'We chose ______ (stay) at home.',
+      'They discussed ______ (go) to the beach.',
+      'He managed ______ (finish) his homework.',
+      'Can you imagine ______ (fly) in space?',
+      'I learned ______ (swim) last year.',
+      'She recommended ______ (visit) the museum.',
+      'I wish ______ (see) you again.',
+      'Would you mind ______ (open) the window?',
+      'They prepared ______ (leave) early.',
+      'He risks ______ (lose) his money.'
+    ],
+    answers: [
+      'to play', 'dancing', 'to leave', 'eating',
+      'to win', 'running', 'to help', 'talking',
+      'to study', 'walking', 'to come', 'playing',
+      'to travel', 'singing', 'to answer', 'cooking',
+      'to carry', 'moving', 'to pass', 'lying',
+      'to stay', 'going', 'to finish', 'flying',
+      'to swim', 'visiting', 'to see', 'opening',
+      'to leave', 'losing'
+    ]
   }
 }
+
+// ==================================================
+// GAME SETTINGS
+// ==================================================
 
 const STEP_TIME = 550
 const ROLL_TIME = 1500
 
+// ==================================================
 // SNAKES AND LADDERS
-// Same positions and images as your current game.
+// SAME POSITIONS AS BEFORE
+// ==================================================
 
 const connections = [
   { type: 'ladder', from: 5, to: 12 },
@@ -106,7 +172,9 @@ const connectionAt = Object.fromEntries(
   connections.map(item => [item.from, item])
 )
 
+// ==================================================
 // BOARD NUMBERING
+// ==================================================
 
 const boardRows = Array.from({ length: 5 }, (_, index) => {
   const row = 4 - index
@@ -130,7 +198,10 @@ function centerOf(number) {
   }
 }
 
+// ==================================================
 // BOARD ART
+// WOODEN LADDERS AND SNAKE IMAGES
+// ==================================================
 
 function BoardArt() {
   return (
@@ -163,6 +234,7 @@ function BoardArt() {
           const py = dx / len
 
           const railWidth = 8
+
           const stepCount = Math.max(
             3,
             Math.floor(len / 25)
@@ -170,6 +242,8 @@ function BoardArt() {
 
           return (
             <g key={from}>
+              {/* Dark wooden outlines */}
+
               {[-railWidth, railWidth].map(offset => (
                 <line
                   key={`outline-${offset}`}
@@ -183,6 +257,8 @@ function BoardArt() {
                 />
               ))}
 
+              {/* Light wooden rails */}
+
               {[-railWidth, railWidth].map(offset => (
                 <line
                   key={`rail-${offset}`}
@@ -195,6 +271,8 @@ function BoardArt() {
                   strokeLinecap="round"
                 />
               ))}
+
+              {/* Wooden ladder rungs */}
 
               {Array.from(
                 { length: stepCount },
@@ -219,6 +297,8 @@ function BoardArt() {
           )
         })}
 
+      {/* Cartoon snake images */}
+
       {connections
         .filter(c => c.type === 'snake')
         .map(c => (
@@ -239,7 +319,9 @@ function BoardArt() {
   )
 }
 
-// REAL 3D DICE
+// ==================================================
+// 3D ROLLING DICE
+// ==================================================
 
 function Dice3D({ value, rolling }) {
   const rotations = {
@@ -296,13 +378,12 @@ function Dice3D({ value, rolling }) {
   )
 }
 
-// ANIMATED ANSWER CELEBRATION
+// ==================================================
+// ANSWER CELEBRATION
+// WORKS WITH ALL THREE GAME TOPICS
+// ==================================================
 
-function AnswerCelebration({
-  question,
-  topic,
-  onClose
-}) {
+function AnswerCelebration({ question, topic, onClose }) {
   const confettiColors = [
     '#ffd700',
     '#ff6b6b',
@@ -310,6 +391,12 @@ function AnswerCelebration({
     '#60a5fa',
     '#c084fc'
   ]
+
+  const originalQuestion = topic.sentences
+    ? topic.sentences[question - 1]
+    : topic.words[question - 1]
+
+  const correctAnswer = topic.answers[question - 1]
 
   return (
     <div
@@ -367,7 +454,7 @@ function AnswerCelebration({
         </div>
 
         <div className="celebration-original">
-          {topic.words[question - 1]}
+          {originalQuestion}
         </div>
 
         <div className="celebration-arrow">
@@ -380,7 +467,7 @@ function AnswerCelebration({
           </div>
 
           <div className="celebration-answer">
-            {topic.answers[question - 1]}
+            {correctAnswer}
           </div>
         </div>
 
@@ -399,10 +486,13 @@ function AnswerCelebration({
   )
 }
 
+// ==================================================
 // MAIN APPLICATION
+// ==================================================
 
 export default function App() {
   const [page, setPage] = useState('home')
+
   const [gameType, setGameType] = useState('pastTense')
 
   const topic = gameTopics[gameType]
@@ -424,6 +514,7 @@ export default function App() {
   )
 
   const [winner, setWinner] = useState(null)
+
   const timers = useRef([])
 
   const busy =
@@ -431,6 +522,10 @@ export default function App() {
     moving ||
     question !== null ||
     winner !== null
+
+  // ----------------------------------------------
+  // TIMER MANAGEMENT
+  // ----------------------------------------------
 
   function schedule(fn, ms) {
     const id = setTimeout(fn, ms)
@@ -447,6 +542,10 @@ export default function App() {
       timers.current.forEach(clearTimeout)
     }
   }, [])
+
+  // ----------------------------------------------
+  // RESET GAME
+  // ----------------------------------------------
 
   function resetGame() {
     cancelTimers()
@@ -467,11 +566,31 @@ export default function App() {
     setMessage('Team 1, roll the dice to begin!')
   }
 
+  // ----------------------------------------------
+  // SELECT A GAME FROM THE HOMEPAGE
+  // ----------------------------------------------
+
   function startGame(type) {
     resetGame()
     setGameType(type)
     setPage('game')
   }
+
+  // ----------------------------------------------
+  // CREATE THE QUESTION MESSAGE
+  // ----------------------------------------------
+
+  function getQuestionMessage(square) {
+    if (topic.sentences) {
+      return topic.sentences[square - 1]
+    }
+
+    return `${topic.instruction} "${topic.words[square - 1]}"!`
+  }
+
+  // ----------------------------------------------
+  // ROLL DICE AND MOVE ONE SQUARE AT A TIME
+  // ----------------------------------------------
 
   function rollDice() {
     if (busy) return
@@ -488,13 +607,15 @@ export default function App() {
     schedule(() => {
       setRolling(false)
 
-      // Handle a roll at the end of the board.
+      // If already at square 30, ask the final question.
       if (destination === current) {
         setQuestion(current)
         setAnswerPopup(false)
+
         setMessage(
-          `${teams[turn].name}, ${topic.instruction.toLowerCase()} "${topic.words[current - 1]}"!`
+          `${teams[turn].name}, ${getQuestionMessage(current)}`
         )
+
         return
       }
 
@@ -521,7 +642,7 @@ export default function App() {
               setAnswerPopup(false)
 
               setMessage(
-                `${teams[turn].name}, ${topic.instruction.toLowerCase()} "${topic.words[square - 1]}"!`
+                `${teams[turn].name}, ${getQuestionMessage(square)}`
               )
             }, STEP_TIME)
           }
@@ -529,6 +650,10 @@ export default function App() {
       }
     }, ROLL_TIME)
   }
+
+  // ----------------------------------------------
+  // CORRECT OR INCORRECT ANSWER
+  // ----------------------------------------------
 
   function finishTurn(correct) {
     if (
@@ -566,7 +691,10 @@ export default function App() {
     setTeams(prev =>
       prev.map((team, i) =>
         i === turn
-          ? { ...team, position: destination }
+          ? {
+              ...team,
+              position: destination
+            }
           : team
       )
     )
@@ -574,7 +702,11 @@ export default function App() {
     function completeTurn() {
       if (destination === 30) {
         setWinner(turn)
-        setMessage(`🏆 ${teams[turn].name} wins!`)
+
+        setMessage(
+          `🏆 ${teams[turn].name} wins!`
+        )
+
         setMoving(false)
         return
       }
@@ -582,9 +714,11 @@ export default function App() {
       const next = (turn + 1) % teams.length
 
       setTurn(next)
+
       setMessage(
         `${feedback} ${teams[next].name}, you're up!`
       )
+
       setMoving(false)
     }
 
@@ -595,10 +729,20 @@ export default function App() {
     }
   }
 
+  // ==================================================
+  // WEBSITE
+  // ==================================================
+
   return (
     <div className="app">
+
       {page === 'home' ? (
         <>
+
+          {/* ======================================
+              NAVIGATION
+          ====================================== */}
+
           <nav className="navbar">
             <div className="logo">
               🎲 English Game Hub
@@ -616,6 +760,10 @@ export default function App() {
               </button>
             </div>
           </nav>
+
+          {/* ======================================
+              HOMEPAGE HERO
+          ====================================== */}
 
           <section className="hero">
             <div className="hero-content">
@@ -636,7 +784,8 @@ export default function App() {
               <button
                 className="main-button"
                 onClick={() => {
-                  document.getElementById('games')
+                  document
+                    .getElementById('games')
                     ?.scrollIntoView({ behavior: 'smooth' })
                 }}
               >
@@ -651,6 +800,10 @@ export default function App() {
               <strong>Ready to play?</strong>
             </div>
           </section>
+
+          {/* ======================================
+              GAME SELECTION
+          ====================================== */}
 
           <section
             className="games-section"
@@ -683,13 +836,9 @@ export default function App() {
                   GRAMMAR
                 </span>
 
-                <h3>
-                  Snakes & Ladders
-                </h3>
+                <h3>Snakes & Ladders</h3>
 
-                <h4>
-                  Past Tense
-                </h4>
+                <h4>Past Tense</h4>
 
                 <p>
                   Roll the dice and practise
@@ -716,13 +865,9 @@ export default function App() {
                   VOCABULARY
                 </span>
 
-                <h3>
-                  Snakes & Ladders
-                </h3>
+                <h3>Snakes & Ladders</h3>
 
-                <h4>
-                  Opposite Adjectives
-                </h4>
+                <h4>Opposite Adjectives</h4>
 
                 <p>
                   Find the opposite adjectives!
@@ -738,7 +883,38 @@ export default function App() {
                 </button>
               </article>
 
-              {/* FUTURE GAMES */}
+              {/* GAME 3: GERUNDS & INFINITIVES */}
+
+              <article className="game-card">
+                <div className="game-icon">
+                  📝🎲
+                </div>
+
+                <span className="game-category">
+                  GRAMMAR
+                </span>
+
+                <h3>Snakes & Ladders</h3>
+
+                <h4>Gerunds & Infinitives</h4>
+
+                <p>
+                  Complete 30 sentences using
+                  gerunds (-ing) and infinitives
+                  (to + verb).
+                </p>
+
+                <button
+                  className="play-button"
+                  onClick={() =>
+                    startGame('gerundsInfinitives')
+                  }
+                >
+                  Play now →
+                </button>
+              </article>
+
+              {/* FUTURE GAME: TREASURE ISLAND */}
 
               <article className="game-card">
                 <div className="game-icon">
@@ -756,6 +932,8 @@ export default function App() {
                 </span>
               </article>
 
+              {/* FUTURE GAME: ENGLISH RACE */}
+
               <article className="game-card">
                 <div className="game-icon">
                   🏁
@@ -772,6 +950,8 @@ export default function App() {
                 </span>
               </article>
 
+              {/* FUTURE GAME: WORD CHALLENGE */}
+
               <article className="game-card">
                 <div className="game-icon">
                   💬
@@ -787,8 +967,13 @@ export default function App() {
                   Coming soon
                 </span>
               </article>
+
             </div>
           </section>
+
+          {/* ======================================
+              CUSTOM GAME SECTION
+          ====================================== */}
 
           <section className="custom-section">
             <div className="custom-icon">
@@ -804,6 +989,10 @@ export default function App() {
               </p>
             </div>
           </section>
+
+          {/* ======================================
+              MEMBERSHIP SECTION
+          ====================================== */}
 
           <section
             className="membership-section"
@@ -836,6 +1025,10 @@ export default function App() {
             </div>
           </section>
 
+          {/* ======================================
+              FOOTER
+          ====================================== */}
+
           <footer>
             <strong>
               🎲 English Game Hub
@@ -845,9 +1038,16 @@ export default function App() {
               Made for playful English learning.
             </p>
           </footer>
+
         </>
       ) : (
+
+        // ==========================================
+        // GAME PAGE
+        // ==========================================
+
         <main className="game-page">
+
           <div className="jungle-leaf leaf-left">
             🌿
           </div>
@@ -855,6 +1055,8 @@ export default function App() {
           <div className="jungle-leaf leaf-right">
             🌴
           </div>
+
+          {/* GAME HEADER */}
 
           <div className="game-top">
             <button
@@ -882,14 +1084,20 @@ export default function App() {
               </h2>
 
               <p>
-                Roll the dice • Move your team •
+                Roll the dice • Move your team •{' '}
                 {topic.subtitle}
               </p>
             </div>
           </div>
 
           <div className="game-layout">
+
+            {/* ==================================
+                GAME BOARD
+            ================================== */}
+
             <section className="board-shell">
+
               <div className="board-banner">
                 <span>
                   🌟 RACE TO 30!
@@ -901,6 +1109,9 @@ export default function App() {
               </div>
 
               <div className="board">
+
+                {/* BOARD SQUARES */}
+
                 <div className="board-grid">
                   {boardRows.flat().map(number => (
                     <div
@@ -928,7 +1139,11 @@ export default function App() {
                   ))}
                 </div>
 
+                {/* SNAKES AND LADDERS */}
+
                 <BoardArt />
+
+                {/* MOVING TEAM CHARACTERS */}
 
                 <div className="explorer-layer">
                   {teams.map((team, i) => {
@@ -954,6 +1169,7 @@ export default function App() {
                     )
                   })}
                 </div>
+
               </div>
 
               <div className="board-footer">
@@ -961,9 +1177,17 @@ export default function App() {
                 <span> • </span>
                 🪜 Climb up the ladders
               </div>
+
             </section>
 
+            {/* ==================================
+                GAME CONTROLS
+            ================================== */}
+
             <aside className="game-controls">
+
+              {/* CURRENT TEAM */}
+
               <section className="turn-panel">
                 <span className="panel-eyebrow">
                   ⭐ WHO'S PLAYING?
@@ -980,7 +1204,9 @@ export default function App() {
                   {teams.map((team, i) => (
                     <div
                       className={`team-pill ${
-                        i === turn ? 'selected' : ''
+                        i === turn
+                          ? 'selected'
+                          : ''
                       }`}
                       key={i}
                     >
@@ -995,6 +1221,8 @@ export default function App() {
                   ))}
                 </div>
               </section>
+
+              {/* 3D DICE */}
 
               <section className="dice-panel">
                 <span className="panel-eyebrow">
@@ -1023,9 +1251,13 @@ export default function App() {
                 </button>
               </section>
 
+              {/* GAME MESSAGE */}
+
               <section className="message-panel">
                 💬 {message}
               </section>
+
+              {/* ENGLISH QUESTION */}
 
               <section className="question-panel">
                 <span className="panel-eyebrow">
@@ -1039,12 +1271,16 @@ export default function App() {
                     </p>
 
                     <div className="challenge-word">
-                      {topic.words[question - 1]}
+                      {topic.sentences
+                        ? topic.sentences[question - 1]
+                        : topic.words[question - 1]}
                     </div>
 
                     <button
                       className="reveal-button"
-                      onClick={() => setAnswerPopup(true)}
+                      onClick={() =>
+                        setAnswerPopup(true)
+                      }
                     >
                       ✨ REVEAL THE ANSWER! ✨
                     </button>
@@ -1052,14 +1288,18 @@ export default function App() {
                     <div className="answer-buttons">
                       <button
                         className="correct-button"
-                        onClick={() => finishTurn(true)}
+                        onClick={() =>
+                          finishTurn(true)
+                        }
                       >
                         ✓ CORRECT
                       </button>
 
                       <button
                         className="incorrect-button"
-                        onClick={() => finishTurn(false)}
+                        onClick={() =>
+                          finishTurn(false)
+                        }
                       >
                         ✕ INCORRECT
                       </button>
@@ -1076,6 +1316,8 @@ export default function App() {
                 )}
               </section>
 
+              {/* WINNER CELEBRATION */}
+
               {winner !== null && (
                 <section className="winner-panel">
                   🏆
@@ -1090,24 +1332,33 @@ export default function App() {
                 </section>
               )}
 
+              {/* RESTART BUTTON */}
+
               <button
                 className="reset-button"
                 onClick={resetGame}
               >
                 ↻ Restart Game
               </button>
+
             </aside>
           </div>
+
+          {/* ANSWER POPUP */}
 
           {answerPopup && question !== null && (
             <AnswerCelebration
               question={question}
               topic={topic}
-              onClose={() => setAnswerPopup(false)}
+              onClose={() =>
+                setAnswerPopup(false)
+              }
             />
           )}
+
         </main>
       )}
+
     </div>
   )
 }
