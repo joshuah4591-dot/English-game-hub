@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 // ==================================================
-// GAME TOPICS
+// ENGLISH GAME HUB — FOUR GAMES
 // ==================================================
 
 const gameTopics = {
@@ -111,6 +111,62 @@ const gameTopics = {
       'to swim', 'visiting', 'to see', 'opening',
       'to leave', 'losing'
     ]
+  },
+
+  feelings: {
+    title: 'Feelings & Emotions',
+    subtitle: 'Guess the emotion!',
+    question: 'How would you feel?',
+    instruction: 'Guess the emotion',
+    words: [
+      '😊', '😢', '😡', '🤩', '😬', '😨',
+      '😎', '😳', '😲', '😐', '😟', '😕',
+      '😴', '🥺', '😒', '😌', '😞', '🥰',
+      '😤', '🌈', '😱', '🤔', '😔', '😁',
+      '😊', '😣', '🕊️', '🙄', '🤯', '😮‍💨'
+    ],
+    sentences: [
+      'You receive a lovely present from your friend.',
+      'Your best friend moves to another country.',
+      'Someone deliberately breaks your favourite toy.',
+      'You are going to Disneyland tomorrow!',
+      'You are about to give a speech in front of the whole school.',
+      'You hear a frightening noise outside your bedroom at night.',
+      'You win first prize in a school competition after working very hard.',
+      'You fall over in front of your classmates and everyone sees you.',
+      'Your friends organise a secret birthday party for you.',
+      'You have nothing interesting to do all afternoon.',
+      'Your dog is missing and you do not know where it is.',
+      'Your teacher explains something, but you do not understand it.',
+      'You stayed awake all night and now you can hardly keep your eyes open.',
+      'Nobody wants to play with you and you are sitting alone.',
+      'Your friend gets an expensive present that you really wanted.',
+      'You are resting on a comfortable chair beside the sea.',
+      'Your favourite football team loses the final match.',
+      'Someone helps you when you are having a difficult time.',
+      'You keep trying to solve a problem, but nothing works.',
+      'Things are difficult today, but you believe tomorrow will be better.',
+      'You hear some completely unexpected and unbelievable news.',
+      'You discover a mysterious locked box and want to know what is inside.',
+      'You told a lie and now you feel bad about what you did.',
+      'You have studied hard and know you are ready for your English test.',
+      'You meet lots of new people and feel uncomfortable speaking.',
+      'You have been waiting for your food for a very long time.',
+      'You are sitting beside a quiet river, listening to the birds.',
+      'Someone keeps interrupting you while you are speaking.',
+      'You watch a magician perform an incredible trick.',
+      'You find your phone after thinking you had lost it forever.'
+    ],
+    answers: [
+      'happy', 'sad', 'angry', 'excited', 'nervous',
+      'scared', 'proud', 'embarrassed', 'surprised',
+      'bored', 'worried', 'confused', 'tired',
+      'lonely', 'jealous', 'relaxed', 'disappointed',
+      'grateful', 'frustrated', 'hopeful', 'shocked',
+      'curious', 'guilty', 'confident', 'shy',
+      'impatient', 'peaceful', 'annoyed',
+      'amazed', 'relieved'
+    ]
   }
 }
 
@@ -120,10 +176,10 @@ const gameTopics = {
 
 const STEP_TIME = 550
 const ROLL_TIME = 1500
+const TRAP_SQUARE = 24
 
 // ==================================================
-// SNAKES AND LADDERS
-// SAME POSITIONS AS BEFORE
+// SNAKES, LADDERS AND TRAP
 // ==================================================
 
 const connections = [
@@ -165,6 +221,12 @@ const connections = [
     width: 134,
     height: 175,
     angle: -25
+  },
+
+  {
+    type: 'trap',
+    from: TRAP_SQUARE,
+    to: 0
   }
 ]
 
@@ -200,7 +262,6 @@ function centerOf(number) {
 
 // ==================================================
 // BOARD ART
-// WOODEN LADDERS AND SNAKE IMAGES
 // ==================================================
 
 function BoardArt() {
@@ -234,7 +295,6 @@ function BoardArt() {
           const py = dx / len
 
           const railWidth = 8
-
           const stepCount = Math.max(
             3,
             Math.floor(len / 25)
@@ -242,8 +302,6 @@ function BoardArt() {
 
           return (
             <g key={from}>
-              {/* Dark wooden outlines */}
-
               {[-railWidth, railWidth].map(offset => (
                 <line
                   key={`outline-${offset}`}
@@ -257,8 +315,6 @@ function BoardArt() {
                 />
               ))}
 
-              {/* Light wooden rails */}
-
               {[-railWidth, railWidth].map(offset => (
                 <line
                   key={`rail-${offset}`}
@@ -271,8 +327,6 @@ function BoardArt() {
                   strokeLinecap="round"
                 />
               ))}
-
-              {/* Wooden ladder rungs */}
 
               {Array.from(
                 { length: stepCount },
@@ -297,8 +351,6 @@ function BoardArt() {
           )
         })}
 
-      {/* Cartoon snake images */}
-
       {connections
         .filter(c => c.type === 'snake')
         .map(c => (
@@ -320,7 +372,7 @@ function BoardArt() {
 }
 
 // ==================================================
-// 3D ROLLING DICE
+// 3D DICE
 // ==================================================
 
 function Dice3D({ value, rolling }) {
@@ -380,7 +432,6 @@ function Dice3D({ value, rolling }) {
 
 // ==================================================
 // ANSWER CELEBRATION
-// WORKS WITH ALL THREE GAME TOPICS
 // ==================================================
 
 function AnswerCelebration({ question, topic, onClose }) {
@@ -421,9 +472,7 @@ function AnswerCelebration({ question, topic, onClose }) {
                   2 + (i % 5) * 0.25
                 }s`,
                 backgroundColor:
-                  confettiColors[
-                    i % confettiColors.length
-                  ]
+                  confettiColors[i % confettiColors.length]
               }}
             />
           ))}
@@ -487,12 +536,55 @@ function AnswerCelebration({ question, topic, onClose }) {
 }
 
 // ==================================================
+// BACK TO START POPUP
+// ==================================================
+
+function TrapPopup({ teamName, onContinue }) {
+  return (
+    <div
+      className="trap-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Back to start trap"
+    >
+      <div className="trap-card">
+        <div className="trap-skull">
+          💀
+        </div>
+
+        <h2>
+          OH NO!
+        </h2>
+
+        <h3>
+          BACK TO START!
+        </h3>
+
+        <p>
+          {teamName} landed on the trap!
+        </p>
+
+        <div className="trap-arrow">
+          24 ⟶ 🏁 START
+        </div>
+
+        <button
+          className="trap-continue"
+          onClick={onContinue}
+        >
+          😱 BACK TO START!
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ==================================================
 // MAIN APPLICATION
 // ==================================================
 
 export default function App() {
   const [page, setPage] = useState('home')
-
   const [gameType, setGameType] = useState('pastTense')
 
   const topic = gameTopics[gameType]
@@ -508,11 +600,11 @@ export default function App() {
   const [moving, setMoving] = useState(false)
   const [question, setQuestion] = useState(null)
   const [answerPopup, setAnswerPopup] = useState(false)
-
+  const [trapPopup, setTrapPopup] = useState(false)
+  const [boardShaking, setBoardShaking] = useState(false)
   const [message, setMessage] = useState(
     'Team 1, roll the dice to begin!'
   )
-
   const [winner, setWinner] = useState(null)
 
   const timers = useRef([])
@@ -521,6 +613,7 @@ export default function App() {
     rolling ||
     moving ||
     question !== null ||
+    trapPopup ||
     winner !== null
 
   // ----------------------------------------------
@@ -561,14 +654,11 @@ export default function App() {
     setMoving(false)
     setQuestion(null)
     setAnswerPopup(false)
+    setTrapPopup(false)
+    setBoardShaking(false)
     setWinner(null)
-
     setMessage('Team 1, roll the dice to begin!')
   }
-
-  // ----------------------------------------------
-  // SELECT A GAME FROM THE HOMEPAGE
-  // ----------------------------------------------
 
   function startGame(type) {
     resetGame()
@@ -577,7 +667,7 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // CREATE THE QUESTION MESSAGE
+  // QUESTION MESSAGE
   // ----------------------------------------------
 
   function getQuestionMessage(square) {
@@ -589,7 +679,44 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // ROLL DICE AND MOVE ONE SQUARE AT A TIME
+  // MOVE TEAM ONE SQUARE AT A TIME
+  // ----------------------------------------------
+
+  function moveTeam(from, to, onComplete) {
+    if (from === to) {
+      onComplete()
+      return
+    }
+
+    const direction = to > from ? 1 : -1
+    const steps = Math.abs(to - from)
+
+    setMoving(true)
+
+    for (let step = 1; step <= steps; step++) {
+      const square = from + step * direction
+
+      schedule(() => {
+        setTeams(prev =>
+          prev.map((team, i) =>
+            i === turn
+              ? { ...team, position: square }
+              : team
+          )
+        )
+
+        if (step === steps) {
+          schedule(() => {
+            setMoving(false)
+            onComplete()
+          }, STEP_TIME)
+        }
+      }, step * STEP_TIME)
+    }
+  }
+
+  // ----------------------------------------------
+  // ROLL DICE
   // ----------------------------------------------
 
   function rollDice() {
@@ -601,65 +728,62 @@ export default function App() {
 
     setDice(result)
     setRolling(true)
-
     setMessage(`${teams[turn].name} is rolling...`)
 
     schedule(() => {
       setRolling(false)
 
-      // If already at square 30, ask the final question.
       if (destination === current) {
         setQuestion(current)
         setAnswerPopup(false)
-
         setMessage(
           `${teams[turn].name}, ${getQuestionMessage(current)}`
         )
-
         return
       }
 
-      setMoving(true)
+      moveTeam(current, destination, () => {
+        setQuestion(destination)
+        setAnswerPopup(false)
 
-      for (
-        let square = current + 1;
-        square <= destination;
-        square++
-      ) {
-        schedule(() => {
-          setTeams(prev =>
-            prev.map((team, i) =>
-              i === turn
-                ? { ...team, position: square }
-                : team
-            )
-          )
-
-          if (square === destination) {
-            schedule(() => {
-              setMoving(false)
-              setQuestion(square)
-              setAnswerPopup(false)
-
-              setMessage(
-                `${teams[turn].name}, ${getQuestionMessage(square)}`
-              )
-            }, STEP_TIME)
-          }
-        }, (square - current) * STEP_TIME)
-      }
+        setMessage(
+          `${teams[turn].name}, ${getQuestionMessage(destination)}`
+        )
+      })
     }, ROLL_TIME)
   }
 
   // ----------------------------------------------
-  // CORRECT OR INCORRECT ANSWER
+  // ADVANCE TO NEXT TEAM
+  // ----------------------------------------------
+
+  function nextTurn(feedback, destination) {
+    if (destination === 30) {
+      setWinner(turn)
+      setMessage(`🏆 ${teams[turn].name} wins!`)
+      setMoving(false)
+      return
+    }
+
+    const next = (turn + 1) % teams.length
+
+    setTurn(next)
+    setMessage(
+      `${feedback} ${teams[next].name}, you're up!`
+    )
+    setMoving(false)
+  }
+
+  // ----------------------------------------------
+  // CORRECT / INCORRECT ANSWER
   // ----------------------------------------------
 
   function finishTurn(correct) {
     if (
       question === null ||
       moving ||
-      answerPopup
+      answerPopup ||
+      trapPopup
     ) {
       return
     }
@@ -667,66 +791,75 @@ export default function App() {
     const square = question
     const special = connectionAt[square]
 
-    let destination = square
-
-    let feedback = correct
+    const feedback = correct
       ? 'Great answer!'
       : `The answer is "${topic.answers[square - 1]}".`
-
-    if (special) {
-      destination = special.to
-
-      feedback += special.type === 'snake'
-        ? ` 🐍 Slide to ${destination}!`
-        : ` 🪜 Climb to ${destination}!`
-    }
 
     setQuestion(null)
     setAnswerPopup(false)
 
-    if (special) {
-      setMoving(true)
+    // BACK TO START TRAP
+    if (special?.type === 'trap') {
+      setTrapPopup(true)
+      setBoardShaking(true)
+      setMessage(
+        `💀 OH NO! ${teams[turn].name} landed on the Back to Start trap!`
+      )
+      return
     }
 
-    setTeams(prev =>
-      prev.map((team, i) =>
-        i === turn
-          ? {
-              ...team,
-              position: destination
-            }
-          : team
-      )
-    )
+    // SNAKES AND LADDERS
+    if (special) {
+      const destination = special.to
 
-    function completeTurn() {
-      if (destination === 30) {
-        setWinner(turn)
+      const specialMessage =
+        special.type === 'snake'
+          ? `🐍 Slide down to square ${destination}!`
+          : `🪜 Climb up to square ${destination}!`
 
-        setMessage(
-          `🏆 ${teams[turn].name} wins!`
+      setMessage(specialMessage)
+
+      moveTeam(square, destination, () => {
+        nextTurn(
+          `${feedback} ${specialMessage}`,
+          destination
         )
+      })
 
-        setMoving(false)
-        return
-      }
+      return
+    }
+
+    nextTurn(feedback, square)
+  }
+
+  // ----------------------------------------------
+  // TRAP POPUP CONTINUE
+  // ----------------------------------------------
+
+  function activateTrap() {
+    setTrapPopup(false)
+
+    // Give the board a final shake, then return
+    // the team directly to the starting area.
+    schedule(() => {
+      setTeams(prev =>
+        prev.map((team, i) =>
+          i === turn
+            ? { ...team, position: 0 }
+            : team
+        )
+      )
+
+      setBoardShaking(false)
 
       const next = (turn + 1) % teams.length
 
       setTurn(next)
 
       setMessage(
-        `${feedback} ${teams[next].name}, you're up!`
+        `💀 Back to START! ${teams[next].name}, you're up!`
       )
-
-      setMoving(false)
-    }
-
-    if (special) {
-      schedule(completeTurn, 900)
-    } else {
-      completeTurn()
-    }
+    }, 450)
   }
 
   // ==================================================
@@ -739,9 +872,7 @@ export default function App() {
       {page === 'home' ? (
         <>
 
-          {/* ======================================
-              NAVIGATION
-          ====================================== */}
+          {/* NAVIGATION */}
 
           <nav className="navbar">
             <div className="logo">
@@ -761,9 +892,7 @@ export default function App() {
             </div>
           </nav>
 
-          {/* ======================================
-              HOMEPAGE HERO
-          ====================================== */}
+          {/* HERO */}
 
           <section className="hero">
             <div className="hero-content">
@@ -801,14 +930,9 @@ export default function App() {
             </div>
           </section>
 
-          {/* ======================================
-              GAME SELECTION
-          ====================================== */}
+          {/* GAME SELECTION */}
 
-          <section
-            className="games-section"
-            id="games"
-          >
+          <section className="games-section" id="games">
             <div className="section-heading">
               <div>
                 <span className="small-heading">
@@ -825,7 +949,7 @@ export default function App() {
 
             <div className="game-grid">
 
-              {/* GAME 1: PAST TENSE */}
+              {/* GAME 1 */}
 
               <article className="game-card">
                 <div className="game-icon">
@@ -837,7 +961,6 @@ export default function App() {
                 </span>
 
                 <h3>Snakes & Ladders</h3>
-
                 <h4>Past Tense</h4>
 
                 <p>
@@ -854,7 +977,7 @@ export default function App() {
                 </button>
               </article>
 
-              {/* GAME 2: OPPOSITE ADJECTIVES */}
+              {/* GAME 2 */}
 
               <article className="game-card">
                 <div className="game-icon">
@@ -866,7 +989,6 @@ export default function App() {
                 </span>
 
                 <h3>Snakes & Ladders</h3>
-
                 <h4>Opposite Adjectives</h4>
 
                 <p>
@@ -883,7 +1005,7 @@ export default function App() {
                 </button>
               </article>
 
-              {/* GAME 3: GERUNDS & INFINITIVES */}
+              {/* GAME 3 */}
 
               <article className="game-card">
                 <div className="game-icon">
@@ -895,7 +1017,6 @@ export default function App() {
                 </span>
 
                 <h3>Snakes & Ladders</h3>
-
                 <h4>Gerunds & Infinitives</h4>
 
                 <p>
@@ -914,7 +1035,34 @@ export default function App() {
                 </button>
               </article>
 
-              {/* FUTURE GAME: TREASURE ISLAND */}
+              {/* GAME 4 */}
+
+              <article className="game-card">
+                <div className="game-icon">
+                  😊😢😡
+                </div>
+
+                <span className="game-category">
+                  VOCABULARY
+                </span>
+
+                <h3>Snakes & Ladders</h3>
+                <h4>Feelings & Emotions</h4>
+
+                <p>
+                  Read everyday situations and guess
+                  the correct feeling or emotion!
+                </p>
+
+                <button
+                  className="play-button"
+                  onClick={() => startGame('feelings')}
+                >
+                  Play now →
+                </button>
+              </article>
+
+              {/* FUTURE GAMES */}
 
               <article className="game-card">
                 <div className="game-icon">
@@ -932,8 +1080,6 @@ export default function App() {
                 </span>
               </article>
 
-              {/* FUTURE GAME: ENGLISH RACE */}
-
               <article className="game-card">
                 <div className="game-icon">
                   🏁
@@ -949,8 +1095,6 @@ export default function App() {
                   Coming soon
                 </span>
               </article>
-
-              {/* FUTURE GAME: WORD CHALLENGE */}
 
               <article className="game-card">
                 <div className="game-icon">
@@ -971,9 +1115,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ======================================
-              CUSTOM GAME SECTION
-          ====================================== */}
+          {/* CUSTOM GAMES */}
 
           <section className="custom-section">
             <div className="custom-icon">
@@ -990,9 +1132,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ======================================
-              MEMBERSHIP SECTION
-          ====================================== */}
+          {/* MEMBERSHIP */}
 
           <section
             className="membership-section"
@@ -1025,9 +1165,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ======================================
-              FOOTER
-          ====================================== */}
+          {/* FOOTER */}
 
           <footer>
             <strong>
@@ -1062,8 +1200,7 @@ export default function App() {
             <button
               className="back-button"
               onClick={() => {
-                cancelTimers()
-                setAnswerPopup(false)
+                resetGame()
                 setPage('home')
               }}
             >
@@ -1092,9 +1229,7 @@ export default function App() {
 
           <div className="game-layout">
 
-            {/* ==================================
-                GAME BOARD
-            ================================== */}
+            {/* GAME BOARD */}
 
             <section className="board-shell">
 
@@ -1108,7 +1243,11 @@ export default function App() {
                 </span>
               </div>
 
-              <div className="board">
+              <div
+                className={`board ${
+                  boardShaking ? 'trap-shaking' : ''
+                }`}
+              >
 
                 {/* BOARD SQUARES */}
 
@@ -1119,6 +1258,10 @@ export default function App() {
                         number === 30
                           ? 'finish-square'
                           : ''
+                      } ${
+                        number === TRAP_SQUARE
+                          ? 'trap-square'
+                          : ''
                       }`}
                       key={number}
                     >
@@ -1126,9 +1269,21 @@ export default function App() {
                         {number}
                       </span>
 
-                      <strong>
-                        {topic.words[number - 1]}
-                      </strong>
+                      {number === TRAP_SQUARE ? (
+                        <div className="trap-square-content">
+                          <span className="trap-square-icon">
+                            💀
+                          </span>
+
+                          <strong>
+                            BACK TO START!
+                          </strong>
+                        </div>
+                      ) : (
+                        <strong>
+                          {topic.words[number - 1]}
+                        </strong>
+                      )}
 
                       {number === 30 && (
                         <span className="finish">
@@ -1176,13 +1331,13 @@ export default function App() {
                 🐍 Slide down the snakes
                 <span> • </span>
                 🪜 Climb up the ladders
+                <span> • </span>
+                💀 Avoid square 24!
               </div>
 
             </section>
 
-            {/* ==================================
-                GAME CONTROLS
-            ================================== */}
+            {/* GAME CONTROLS */}
 
             <aside className="game-controls">
 
@@ -1204,9 +1359,7 @@ export default function App() {
                   {teams.map((team, i) => (
                     <div
                       className={`team-pill ${
-                        i === turn
-                          ? 'selected'
-                          : ''
+                        i === turn ? 'selected' : ''
                       }`}
                       key={i}
                     >
@@ -1245,6 +1398,8 @@ export default function App() {
                     ? 'Moving...'
                     : question !== null
                     ? 'Answer first!'
+                    : trapPopup
+                    ? 'Oh no! A trap!'
                     : winner !== null
                     ? 'Game finished'
                     : '🎲 ROLL DICE'}
@@ -1257,7 +1412,7 @@ export default function App() {
                 💬 {message}
               </section>
 
-              {/* ENGLISH QUESTION */}
+              {/* QUESTION PANEL */}
 
               <section className="question-panel">
                 <span className="panel-eyebrow">
@@ -1275,6 +1430,12 @@ export default function App() {
                         ? topic.sentences[question - 1]
                         : topic.words[question - 1]}
                     </div>
+
+                    {gameType === 'feelings' && (
+                      <p className="feelings-hint">
+                        Say the emotion in English!
+                      </p>
+                    )}
 
                     <button
                       className="reveal-button"
@@ -1309,6 +1470,8 @@ export default function App() {
                   <div className="challenge-placeholder">
                     {winner !== null
                       ? '🏆 Game finished!'
+                      : trapPopup
+                      ? '💀 BACK TO START!'
                       : moving
                       ? '🚶 Explorer is moving...'
                       : '🎲 Roll the dice to get a question!'}
@@ -1316,7 +1479,7 @@ export default function App() {
                 )}
               </section>
 
-              {/* WINNER CELEBRATION */}
+              {/* WINNER */}
 
               {winner !== null && (
                 <section className="winner-panel">
@@ -1332,7 +1495,7 @@ export default function App() {
                 </section>
               )}
 
-              {/* RESTART BUTTON */}
+              {/* RESTART */}
 
               <button
                 className="reset-button"
@@ -1356,8 +1519,202 @@ export default function App() {
             />
           )}
 
+          {/* TRAP POPUP */}
+
+          {trapPopup && (
+            <TrapPopup
+              teamName={teams[turn].name}
+              onContinue={activateTrap}
+            />
+          )}
+
         </main>
       )}
+
+      {/* TRAP STYLES */}
+
+      <style>{`
+        .trap-square {
+          background: linear-gradient(
+            135deg,
+            #451b25,
+            #982c3c
+          ) !important;
+          color: white !important;
+          border: 3px solid #ffbf47 !important;
+        }
+
+        .trap-square .square-number {
+          color: #ffffff !important;
+        }
+
+        .trap-square-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 3px;
+          width: 100%;
+          text-align: center;
+        }
+
+        .trap-square-icon {
+          font-size: clamp(24px, 3vw, 42px);
+          line-height: 1;
+        }
+
+        .trap-square-content strong {
+          font-size: clamp(8px, 1vw, 12px);
+          line-height: 1.1;
+          color: #fff5c4 !important;
+          text-shadow: 0 1px 3px #321018;
+        }
+
+        .trap-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 99999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          background: rgba(20, 5, 15, 0.82);
+          backdrop-filter: blur(6px);
+        }
+
+        .trap-card {
+          position: relative;
+          width: min(100%, 460px);
+          padding: 35px 25px;
+          border-radius: 28px;
+          border: 5px solid #ffbd48;
+          background: linear-gradient(
+            145deg,
+            #662236,
+            #2c1027
+          );
+          color: white;
+          text-align: center;
+          box-shadow:
+            0 0 60px rgba(255, 75, 75, 0.4),
+            0 20px 80px rgba(0, 0, 0, 0.5);
+          animation: trap-pop 0.5s ease both;
+        }
+
+        .trap-skull {
+          font-size: 105px;
+          animation: skull-bounce 0.8s infinite alternate;
+        }
+
+        .trap-card h2 {
+          margin: 8px 0;
+          font-size: clamp(38px, 7vw, 62px);
+          color: #ffdf68;
+          text-shadow: 3px 4px 0 #922f31;
+        }
+
+        .trap-card h3 {
+          margin: 10px 0;
+          font-size: clamp(22px, 4vw, 34px);
+          color: #ffffff;
+        }
+
+        .trap-card p {
+          font-size: 19px;
+          color: #ffe4db;
+        }
+
+        .trap-arrow {
+          margin: 22px auto;
+          padding: 15px;
+          border-radius: 15px;
+          background: rgba(255, 255, 255, 0.12);
+          font-size: 24px;
+          font-weight: 900;
+          color: #ffda73;
+        }
+
+        .trap-continue {
+          width: 100%;
+          padding: 17px 20px;
+          border: none;
+          border-radius: 16px;
+          background: linear-gradient(
+            135deg,
+            #ffcc42,
+            #ff8533
+          );
+          color: #401923;
+          font-size: 18px;
+          font-weight: 900;
+          cursor: pointer;
+          box-shadow: 0 6px 0 #a54c20;
+          transition: transform 0.15s ease;
+        }
+
+        .trap-continue:hover {
+          transform: translateY(-3px);
+        }
+
+        .trap-shaking {
+          animation: trap-shake 0.5s ease-in-out infinite;
+        }
+
+        .feelings-hint {
+          font-size: 14px;
+          color: #6b7280;
+          font-weight: 600;
+        }
+
+        @keyframes trap-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0.5) rotate(-10deg);
+          }
+          70% {
+            transform: scale(1.08) rotate(3deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0);
+          }
+        }
+
+        @keyframes skull-bounce {
+          from {
+            transform: translateY(-8px) rotate(-8deg);
+          }
+          to {
+            transform: translateY(8px) rotate(8deg);
+          }
+        }
+
+        @keyframes trap-shake {
+          0%, 100% {
+            transform: translateX(0);
+          }
+          20% {
+            transform: translateX(-7px) rotate(-1deg);
+          }
+          40% {
+            transform: translateX(7px) rotate(1deg);
+          }
+          60% {
+            transform: translateX(-5px);
+          }
+          80% {
+            transform: translateX(5px);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .trap-card,
+          .trap-skull,
+          .trap-shaking {
+            animation: none;
+          }
+        }
+      `}</style>
 
     </div>
   )
