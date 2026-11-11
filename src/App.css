@@ -1,7 +1,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
 
-/* GENERAL */
+/* ==========================================
+   1. GENERAL
+========================================== */
 
 * {
   box-sizing: border-box;
@@ -32,17 +34,19 @@ button:disabled {
   min-height: 100vh;
 }
 
-/* HOME PAGE */
+/* ==========================================
+   2. HOME PAGE
+========================================== */
 
 .navbar {
   min-height: 78px;
   padding: 15px 7%;
-  background: #ffffff;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  box-shadow: 0 4px 15px rgba(30, 80, 40, 0.08);
+  box-shadow: 0 4px 15px rgba(30,80,40,.08);
 }
 
 .logo {
@@ -87,9 +91,9 @@ button:disabled {
   padding: 70px 10%;
   background: linear-gradient(
     135deg,
-    #d7f7d6 0%,
+    #d7f7d6,
     #b5eecb 50%,
-    #d5f2ff 100%
+    #d5f2ff
   );
   display: flex;
   align-items: center;
@@ -110,7 +114,7 @@ button:disabled {
 }
 
 .hero h1 {
-  font-size: clamp(38px, 5vw, 62px);
+  font-size: clamp(38px,5vw,62px);
   line-height: 1.13;
   color: #205a38;
   margin: 18px 0;
@@ -133,8 +137,8 @@ button:disabled {
   min-height: 270px;
   flex-shrink: 0;
   border-radius: 35px;
-  border: 7px solid #ffffff;
-  background: linear-gradient(145deg, #fff6d7, #d7f8de);
+  border: 7px solid white;
+  background: linear-gradient(145deg,#fff6d7,#d7f8de);
   box-shadow: 0 12px 0 #7ec998;
   display: flex;
   flex-wrap: wrap;
@@ -155,7 +159,9 @@ button:disabled {
   color: #27814d;
 }
 
-/* GAME SELECTION */
+/* ==========================================
+   3. GAME SELECTION
+========================================== */
 
 .games-section {
   padding: 65px 8%;
@@ -188,7 +194,7 @@ button:disabled {
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4,minmax(0,1fr));
   gap: 20px;
 }
 
@@ -269,7 +275,7 @@ button:disabled {
 
 .membership-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2,1fr);
   gap: 22px;
   margin-top: 25px;
   text-align: left;
@@ -302,7 +308,9 @@ footer p {
   color: #d4efdc;
 }
 
-/* TROPICAL GAME PAGE */
+/* ==========================================
+   4. JUNGLE GAME PAGE
+========================================== */
 
 .game-page {
   position: relative;
@@ -312,12 +320,12 @@ footer p {
   background:
     radial-gradient(
       circle at 12% 20%,
-      #c9f5aa 0,
+      #c9f5aa,
       transparent 30%
     ),
     radial-gradient(
       circle at 85% 75%,
-      #b7eecb 0,
+      #b7eecb,
       transparent 35%
     ),
     linear-gradient(
@@ -331,7 +339,7 @@ footer p {
 .jungle-leaf {
   position: absolute;
   font-size: 100px;
-  opacity: 0.3;
+  opacity: .3;
   pointer-events: none;
   z-index: 0;
 }
@@ -382,11 +390,11 @@ footer p {
 }
 
 .game-title h1 {
-  font-size: clamp(30px, 4vw, 48px);
+  font-size: clamp(30px,4vw,48px);
   font-weight: 900;
   color: #246a3b;
   margin: 8px 0;
-  text-shadow: 2px 3px 0 #ffffff;
+  text-shadow: 2px 3px 0 white;
 }
 
 .game-title p {
@@ -395,20 +403,20 @@ footer p {
   font-weight: 800;
 }
 
-/* MAIN GAME LAYOUT */
-
 .game-layout {
   max-width: 1350px;
   margin: auto;
   display: grid;
   grid-template-columns:
-    minmax(0, 1.8fr)
-    minmax(290px, 0.85fr);
+    minmax(0,1.8fr)
+    minmax(290px,.85fr);
   gap: 25px;
   align-items: start;
 }
 
-/* GAME BOARD */
+/* ==========================================
+   5. SNAKES & LADDERS BOARD
+========================================== */
 
 .board-shell {
   background: #fff7d9;
@@ -417,7 +425,7 @@ footer p {
   padding: 12px;
   box-shadow:
     0 10px 0 #704324,
-    0 17px 25px rgba(55, 70, 25, 0.18);
+    0 17px 25px rgba(55,70,25,.18);
   min-width: 0;
 }
 
@@ -446,8 +454,8 @@ footer p {
 
 .board-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-template-rows: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6,minmax(0,1fr));
+  grid-template-rows: repeat(5,minmax(0,1fr));
   gap: 3px;
   width: 100%;
   aspect-ratio: 6 / 5;
@@ -462,7 +470,7 @@ footer p {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border: 2px solid rgba(72, 127, 58, 0.25);
+  border: 2px solid rgba(72,127,58,.25);
   border-radius: 8px;
   overflow: hidden;
   text-align: center;
@@ -489,20 +497,20 @@ footer p {
   top: 5px;
   left: 7px;
   color: #204e2d;
-  font-size: clamp(12px, 1.2vw, 17px);
+  font-size: clamp(12px,1.2vw,17px);
   font-weight: 900;
-  z-index: 4;
+  z-index: 5;
 }
 
 .square strong {
   color: #183c26;
-  font-size: clamp(10px, 1.25vw, 18px);
+  font-size: clamp(10px,1.25vw,18px);
   font-weight: 900;
   line-height: 1.15;
   overflow-wrap: anywhere;
   position: relative;
   z-index: 4;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 0 rgba(255,255,255,.9);
 }
 
 .finish-square {
@@ -525,9 +533,9 @@ footer p {
   transform: translateX(-50%);
   display: flex;
   gap: 3px;
-  font-size: clamp(14px, 1.8vw, 25px);
+  font-size: clamp(14px,1.8vw,25px);
   z-index: 6;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
 }
 
 .board-connections {
@@ -549,7 +557,51 @@ footer p {
   font-weight: 900;
 }
 
-/* RIGHT-HAND CONTROLS */
+/* ==========================================
+   6. ANIMATED TEAM EXPLORERS
+========================================== */
+
+.explorer-layer {
+  position: absolute;
+  inset: 9px;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.explorer {
+  position: absolute;
+  transform: translate(-50%,-50%);
+  transition:
+    left 530ms ease-in-out,
+    top 530ms ease-in-out;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 7px rgba(0,0,0,.3);
+}
+
+.explorer-0 {
+  background: #f54d45;
+  margin-left: -12px;
+}
+
+.explorer-1 {
+  background: #268dff;
+  margin-left: 12px;
+}
+
+.explorer-character {
+  font-size: 29px;
+  line-height: 1;
+}
+
+/* ==========================================
+   7. GAME CONTROLS
+========================================== */
 
 .game-controls {
   position: relative;
@@ -570,11 +622,11 @@ footer p {
 .question-panel,
 .message-panel,
 .winner-panel {
-  background: #ffffff;
+  background: white;
   border: 4px solid #83c3a2;
   border-radius: 24px;
   padding: 20px;
-  box-shadow: 0 6px 0 rgba(44, 123, 72, 0.2);
+  box-shadow: 0 6px 0 rgba(44,123,72,.2);
 }
 
 .panel-eyebrow {
@@ -635,7 +687,9 @@ footer p {
   color: #235c3b;
 }
 
-/* DICE PANEL */
+/* ==========================================
+   8. ROLLING DICE
+========================================== */
 
 .dice-panel {
   text-align: center;
@@ -643,29 +697,119 @@ footer p {
   border-color: #efc66b;
 }
 
-.big-dice {
-  font-size: 100px;
-  line-height: 1.1;
-  color: #234d87;
-  margin: 10px auto 18px;
-  filter: drop-shadow(4px 6px 1px rgba(0,0,0,0.12));
+.real-dice-stage {
+  width: 150px;
+  height: 145px;
+  margin: 12px auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 700px;
 }
 
-.dice-rolling {
-  animation: diceShake 0.3s infinite;
+.real-dice {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  transform-style: preserve-3d;
+  transform: var(--dice-final-rotation);
+  transition: transform .4s ease-out;
 }
 
-@keyframes diceShake {
+.real-dice-face {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border: 2px solid #d1d5db;
+  border-radius: 13px;
+  background: linear-gradient(145deg,#fff,#e5e7eb);
+  box-shadow:
+    inset 0 0 12px rgba(255,255,255,.9),
+    inset -5px -5px 10px rgba(0,0,0,.08);
+  backface-visibility: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.real-dice .dice-front {
+  transform: translateZ(38px);
+}
+
+.real-dice .dice-back {
+  transform: rotateY(180deg) translateZ(38px);
+}
+
+.real-dice .dice-right {
+  transform: rotateY(90deg) translateZ(38px);
+}
+
+.real-dice .dice-left {
+  transform: rotateY(-90deg) translateZ(38px);
+}
+
+.real-dice .dice-top {
+  transform: rotateX(90deg) translateZ(38px);
+}
+
+.real-dice .dice-bottom {
+  transform: rotateX(-90deg) translateZ(38px);
+}
+
+.dice-pips {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-template-rows: repeat(3,1fr);
+  width: 53px;
+  height: 53px;
+  align-items: center;
+  justify-items: center;
+}
+
+.dice-pip {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #17212f;
+  box-shadow: inset 1px 2px 2px rgba(0,0,0,.3);
+}
+
+.dice-pip.empty {
+  visibility: hidden;
+}
+
+.real-dice-rolling {
+  animation: realDiceTumble 1.5s
+    cubic-bezier(.2,.7,.3,1) both;
+}
+
+@keyframes realDiceTumble {
   0% {
-    transform: rotate(-15deg) scale(1);
+    transform: rotateX(0) rotateY(0) scale(1);
   }
-
-  50% {
-    transform: rotate(15deg) scale(1.08);
+  20% {
+    transform:
+      rotateX(220deg)
+      rotateY(160deg)
+      rotateZ(35deg)
+      scale(1.18);
   }
-
+  45% {
+    transform:
+      rotateX(480deg)
+      rotateY(390deg)
+      rotateZ(-25deg)
+      scale(1.25);
+  }
+  70% {
+    transform:
+      rotateX(680deg)
+      rotateY(590deg)
+      rotateZ(15deg)
+      scale(1.12);
+  }
   100% {
-    transform: rotate(-15deg) scale(1);
+    transform: var(--dice-final-rotation);
   }
 }
 
@@ -679,7 +823,7 @@ footer p {
   font-size: 20px;
   font-weight: 900;
   box-shadow: 0 6px 0 #b93835;
-  transition: transform 0.15s;
+  transition: transform .15s;
 }
 
 .roll-button:hover:not(:disabled) {
@@ -692,7 +836,9 @@ footer p {
   box-shadow: 0 2px 0 #b93835;
 }
 
-/* GAME MESSAGE */
+/* ==========================================
+   9. QUESTION AND ANSWER CONTROLS
+========================================== */
 
 .message-panel {
   background: #e5f7ff;
@@ -703,8 +849,6 @@ footer p {
   line-height: 1.5;
   text-align: center;
 }
-
-/* ENGLISH CHALLENGE */
 
 .question-panel {
   background: #fff5ff;
@@ -731,6 +875,16 @@ footer p {
   font-size: 38px;
   font-weight: 900;
   margin: 15px 0;
+}
+
+.challenge-placeholder {
+  padding: 16px 10px;
+  text-align: center;
+  color: #9451bc;
+  font-size: 15px;
+  font-weight: 900;
+  background: #f5eaff;
+  border-radius: 12px;
 }
 
 .reveal-button {
@@ -780,8 +934,6 @@ footer p {
   box-shadow: 0 5px 0 #b84244;
 }
 
-/* WINNER AND RESTART */
-
 .winner-panel {
   text-align: center;
   background: #fff3bb;
@@ -815,7 +967,346 @@ footer p {
   background: #4da9e8;
 }
 
-/* RESPONSIVE LAYOUT */
+/* ==========================================
+   10. ANSWER CELEBRATION POPUP
+========================================== */
+
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(5,28,19,.88);
+  backdrop-filter: blur(7px);
+}
+
+.celebration-card {
+  position: relative;
+  width: min(92vw,650px);
+  max-height: 95vh;
+  overflow: hidden;
+  padding: 30px 35px;
+  border: 7px solid #ffd34e;
+  border-radius: 32px;
+  background: radial-gradient(
+    circle at 50% 10%,
+    #34875a,
+    #145c3a 60%,
+    #083b28
+  );
+  box-shadow:
+    0 0 35px rgba(255,215,0,.55),
+    0 20px 70px rgba(0,0,0,.6);
+  text-align: center;
+  color: white;
+  animation: celebrationEntrance .55s
+    cubic-bezier(.2,1.5,.5,1);
+}
+
+.celebration-heading {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(27px,5vw,45px);
+  font-weight: 1000;
+  color: #ffe66d;
+  text-shadow:
+    0 4px 0 #a46a00,
+    0 0 18px rgba(255,230,100,.7);
+  animation: headingBounce .8s ease-in-out;
+}
+
+.celebration-subtitle {
+  position: relative;
+  z-index: 2;
+  margin: 12px 0;
+  color: #c6ffce;
+  font-size: clamp(12px,2vw,17px);
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.celebration-original {
+  position: relative;
+  z-index: 2;
+  margin-top: 15px;
+  font-size: clamp(32px,5vw,52px);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+}
+
+.celebration-arrow {
+  position: relative;
+  z-index: 2;
+  margin: 5px 0;
+  font-size: 37px;
+  color: #ffd34e;
+  animation: arrowBounce 1s infinite;
+}
+
+.celebration-answer-box {
+  position: relative;
+  z-index: 2;
+  padding: 18px 20px;
+  border: 5px solid #ffda5e;
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    #fff8d1,
+    #ffe18b
+  );
+  box-shadow:
+    0 0 25px rgba(255,225,100,.65),
+    inset 0 0 20px rgba(255,255,255,.8);
+  animation: answerBoxReveal .7s .3s both;
+}
+
+.celebration-answer-label {
+  color: #9c6500;
+  font-size: clamp(11px,2vw,16px);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.celebration-answer {
+  margin-top: 8px;
+  color: #13733e;
+  font-size: clamp(45px,9vw,95px);
+  font-weight: 1000;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-shadow: 0 3px 0 rgba(0,0,0,.12);
+  animation: answerBounce .65s .65s both;
+}
+
+.celebration-footer {
+  position: relative;
+  z-index: 2;
+  margin: 18px 0;
+  color: #ffe66d;
+  font-size: clamp(15px,3vw,22px);
+  font-weight: 900;
+}
+
+.celebration-close {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 14px;
+  border: 3px solid white;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    #ff7855,
+    #ed4339
+  );
+  color: white;
+  font-size: clamp(14px,2.5vw,19px);
+  font-weight: 900;
+  box-shadow: 0 6px 0 #a72b22;
+  transition: transform .15s;
+}
+
+.celebration-close:hover {
+  transform: translateY(-3px);
+}
+
+.celebration-close:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #a72b22;
+}
+
+.confetti-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 9px;
+  height: 16px;
+  opacity: 0;
+  animation: confettiFall 2.5s linear infinite;
+}
+
+.celebration-star {
+  position: absolute;
+  z-index: 3;
+  font-size: 34px;
+  pointer-events: none;
+  animation: starFloat 2s ease-in-out infinite;
+}
+
+.star-one {
+  top: 15%;
+  left: 5%;
+}
+
+.star-two {
+  top: 30%;
+  right: 5%;
+  animation-delay: .4s;
+}
+
+.star-three {
+  bottom: 25%;
+  left: 4%;
+  animation-delay: .8s;
+}
+
+.star-four {
+  bottom: 35%;
+  right: 4%;
+  animation-delay: 1.2s;
+}
+
+/* ==========================================
+   11. CELEBRATION ANIMATIONS
+========================================== */
+
+@keyframes celebrationEntrance {
+  from {
+    opacity: 0;
+    transform: scale(.55) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes headingBounce {
+  0% {
+    transform: translateY(-70px) scale(.5);
+    opacity: 0;
+  }
+  65% {
+    transform: translateY(8px) scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes arrowBounce {
+  0%,100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes answerBoxReveal {
+  from {
+    opacity: 0;
+    transform: scale(.5) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes answerBounce {
+  0% {
+    opacity: 0;
+    transform: scale(.2);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-20px) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(700px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes starFloat {
+  0%,100% {
+    transform: translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(15deg);
+  }
+}
+
+/* ==========================================
+   12. FEELINGS & EMOTIONS
+   LARGE EMOJIS — SQUARE-RELATIVE SIZE
+========================================== */
+
+.feelings-board .square {
+  container-type: inline-size;
+}
+
+/*
+  These selectors work with either the
+  emotion-emoji or emotion-emoji-large class.
+  They override older conflicting CSS.
+*/
+
+.app .game-page .feelings-board
+.square strong.emotion-emoji,
+
+.app .game-page .feelings-board
+.square .emotion-emoji-large {
+  position: absolute !important;
+  inset: 12% 3% 3% 3% !important;
+
+  width: 94% !important;
+  height: 85% !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 64px !important;
+  font-size: 76cqw !important;
+
+  line-height: 1 !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  text-shadow: none !important;
+
+  z-index: 2 !important;
+}
+
+.feelings-board .square .square-number {
+  z-index: 5;
+}
+
+.feelings-board .square .finish {
+  z-index: 5;
+}
+
+/* ==========================================
+   13. RESPONSIVE TABLET
+========================================== */
 
 @media (max-width: 1050px) {
   .game-layout {
@@ -824,7 +1315,7 @@ footer p {
 
   .game-controls {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2,minmax(0,1fr));
     align-items: start;
   }
 
@@ -836,9 +1327,13 @@ footer p {
   }
 
   .game-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2,minmax(0,1fr));
   }
 }
+
+/* ==========================================
+   14. RESPONSIVE MOBILE
+========================================== */
 
 @media (max-width: 650px) {
   .navbar {
@@ -920,57 +1415,6 @@ footer p {
     height: calc(100% - 8px);
   }
 
-  .game-title h1 {
-    font-size: 28px;
-  }
-
-  .answer-buttons {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-
-/* ANIMATED EXPLORER CHARACTERS */
-
-.explorer-layer {
-  position: absolute;
-  inset: 9px;
-  pointer-events: none;
-  z-index: 8;
-}
-
-.explorer {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  transition:
-    left 240ms linear,
-    top 240ms linear;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 4px 7px rgba(0,0,0,0.3);
-}
-
-.explorer-0 {
-  background: #f54d45;
-  margin-left: -12px;
-}
-
-.explorer-1 {
-  background: #268dff;
-  margin-left: 12px;
-}
-
-.explorer-character {
-  font-size: 29px;
-  line-height: 1;
-}
-
-@media (max-width: 650px) {
   .explorer-layer {
     inset: 4px;
   }
@@ -983,30 +1427,15 @@ footer p {
   .explorer-character {
     font-size: 20px;
   }
+
+  .game-title h1 {
+    font-size: 28px;
+  }
 }
 
-
-/* SLOW, SMOOTH EXPLORER MOVEMENT */
-
-.explorer {
-  transition:
-    left 530ms ease-in-out,
-    top 530ms ease-in-out;
-}
-
-/* ALWAYS-VISIBLE ENGLISH CHALLENGE */
-
-.challenge-placeholder {
-  padding: 16px 10px;
-  text-align: center;
-  color: #9451bc;
-  font-size: 15px;
-  font-weight: 900;
-  background: #f5eaff;
-  border-radius: 12px;
-}
-
-/* COMPACT DESKTOP GAME LAYOUT */
+/* ==========================================
+   15. COMPACT DESKTOP LAYOUT
+========================================== */
 
 @media (min-width: 1051px) {
   .game-page {
@@ -1042,8 +1471,8 @@ footer p {
   .game-layout {
     max-width: 1400px;
     grid-template-columns:
-      minmax(0, 1.8fr)
-      minmax(260px, 0.8fr);
+      minmax(0,1.8fr)
+      minmax(260px,.8fr);
     gap: 12px;
   }
 
@@ -1102,9 +1531,9 @@ footer p {
     font-size: 12px;
   }
 
-  .big-dice {
-    font-size: 50px;
-    margin: 0 auto 4px;
+  .real-dice-stage {
+    height: 100px;
+    margin: 0 auto 5px;
   }
 
   .roll-button {
@@ -1144,291 +1573,9 @@ footer p {
   }
 }
 
-
-/* =========================================
-   JUNGLE CELEBRATION ANSWER REVEAL
-   ========================================= */
-
-.celebration-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(5, 28, 19, 0.88);
-  backdrop-filter: blur(7px);
-}
-
-.celebration-card {
-  position: relative;
-  width: min(92vw, 650px);
-  max-height: 95vh;
-  overflow: hidden;
-  padding: 30px 35px;
-  border: 7px solid #ffd34e;
-  border-radius: 32px;
-  background:
-    radial-gradient(
-      circle at 50% 10%,
-      #34875a,
-      #145c3a 60%,
-      #083b28
-    );
-  box-shadow:
-    0 0 35px rgba(255, 215, 0, 0.55),
-    0 20px 70px rgba(0, 0, 0, 0.6);
-  text-align: center;
-  color: white;
-  animation: celebrationEntrance 0.55s
-    cubic-bezier(.2, 1.5, .5, 1);
-}
-
-.celebration-heading {
-  position: relative;
-  z-index: 2;
-  font-size: clamp(27px, 5vw, 45px);
-  font-weight: 1000;
-  color: #ffe66d;
-  text-shadow:
-    0 4px 0 #a46a00,
-    0 0 18px rgba(255, 230, 100, 0.7);
-  animation: headingBounce 0.8s ease-in-out;
-}
-
-.celebration-subtitle {
-  position: relative;
-  z-index: 2;
-  margin: 12px 0;
-  color: #c6ffce;
-  font-size: clamp(12px, 2vw, 17px);
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
-.celebration-original {
-  position: relative;
-  z-index: 2;
-  margin-top: 15px;
-  font-size: clamp(32px, 5vw, 52px);
-  font-weight: 900;
-  color: #ffffff;
-  text-transform: uppercase;
-}
-
-.celebration-arrow {
-  position: relative;
-  z-index: 2;
-  margin: 5px 0;
-  font-size: 37px;
-  color: #ffd34e;
-  animation: arrowBounce 1s infinite;
-}
-
-.celebration-answer-box {
-  position: relative;
-  z-index: 2;
-  padding: 18px 20px;
-  border: 5px solid #ffda5e;
-  border-radius: 24px;
-  background: linear-gradient(
-    135deg,
-    #fff8d1,
-    #ffe18b
-  );
-  box-shadow:
-    0 0 25px rgba(255, 225, 100, 0.65),
-    inset 0 0 20px rgba(255, 255, 255, 0.8);
-  animation: answerBoxReveal 0.7s 0.3s both;
-}
-
-.celebration-answer-label {
-  color: #9c6500;
-  font-size: clamp(11px, 2vw, 16px);
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.celebration-answer {
-  margin-top: 8px;
-  color: #13733e;
-  font-size: clamp(45px, 9vw, 95px);
-  font-weight: 1000;
-  line-height: 1.1;
-  text-transform: uppercase;
-  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
-  animation: answerBounce 0.65s 0.65s both;
-}
-
-.celebration-footer {
-  position: relative;
-  z-index: 2;
-  margin: 18px 0;
-  color: #ffe66d;
-  font-size: clamp(15px, 3vw, 22px);
-  font-weight: 900;
-}
-
-.celebration-close {
-  position: relative;
-  z-index: 3;
-  width: 100%;
-  padding: 14px;
-  border: 3px solid white;
-  border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    #ff7855,
-    #ed4339
-  );
-  color: white;
-  font-size: clamp(14px, 2.5vw, 19px);
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 6px 0 #a72b22;
-  transition: transform 0.15s;
-}
-
-.celebration-close:hover {
-  transform: translateY(-3px);
-}
-
-.celebration-close:active {
-  transform: translateY(3px);
-  box-shadow: 0 3px 0 #a72b22;
-}
-
-/* CONFETTI */
-
-.confetti-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.confetti-piece {
-  position: absolute;
-  top: -20px;
-  width: 9px;
-  height: 16px;
-  opacity: 0;
-  animation: confettiFall 2.5s linear infinite;
-}
-
-.celebration-star {
-  position: absolute;
-  z-index: 3;
-  font-size: 34px;
-  pointer-events: none;
-  animation: starFloat 2s ease-in-out infinite;
-}
-
-.star-one {
-  top: 15%;
-  left: 5%;
-}
-
-.star-two {
-  top: 30%;
-  right: 5%;
-  animation-delay: 0.4s;
-}
-
-.star-three {
-  bottom: 25%;
-  left: 4%;
-  animation-delay: 0.8s;
-}
-
-.star-four {
-  bottom: 35%;
-  right: 4%;
-  animation-delay: 1.2s;
-}
-
-/* ANIMATIONS */
-
-@keyframes celebrationEntrance {
-  from {
-    opacity: 0;
-    transform: scale(0.55) rotate(-5deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-@keyframes headingBounce {
-  0% {
-    transform: translateY(-70px) scale(0.5);
-    opacity: 0;
-  }
-  65% {
-    transform: translateY(8px) scale(1.12);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes arrowBounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(8px);
-  }
-}
-
-@keyframes answerBoxReveal {
-  from {
-    opacity: 0;
-    transform: scale(0.5) rotate(-4deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-@keyframes answerBounce {
-  0% {
-    opacity: 0;
-    transform: scale(0.2);
-  }
-  65% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes confettiFall {
-  0% {
-    transform: translateY(-20px) rotate(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(700px) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-@keyframes starFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(-10deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(15deg);
-  }
-}
+/* ==========================================
+   16. SMALL HEIGHT SCREENS
+========================================== */
 
 @media (max-height: 650px) {
   .celebration-card {
@@ -1458,6 +1605,10 @@ footer p {
   }
 }
 
+/* ==========================================
+   17. ACCESSIBILITY
+========================================== */
+
 @media (prefers-reduced-motion: reduce) {
   .celebration-card,
   .celebration-heading,
@@ -1465,276 +1616,8 @@ footer p {
   .celebration-answer-box,
   .celebration-answer,
   .confetti-piece,
-  .celebration-star {
+  .celebration-star,
+  .real-dice-rolling {
     animation: none;
   }
 }
-
-
-/* =====================================
-   REALISTIC 3D ROLLING DICE
-   ===================================== */
-
-
-.dice-3d-stage {
-height: 112px;
-display: flex;
-align-items: center;
-justify-content: center;
-perspective: 650px;
-}
-
-.dice-3d {
-position: relative;
-width: 72px;
-height: 72px;
-transform-style: preserve-3d;
-transform: var(--dice-final-rotation);
-transition: transform 0.3s ease-out;
-filter: drop-shadow(4px 7px 5px rgba(0,0,0,0.2));
-}
-
-.dice-3d-face {
-position: absolute;
-inset: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-border: 2px solid #dedede;
-border-radius: 13px;
-background: linear-gradient(
-135deg,
-#ffffff,
-#f0f0f0
-);
-color: #202020;
-font-size: 56px;
-line-height: 1;
-backface-visibility: hidden;
-box-shadow: inset 0 0 10px rgba(0,0,0,0.07);
-}
-
-.dice-front {
-transform: translateZ(36px);
-}
-
-.dice-back {
-transform: rotateY(180deg) translateZ(36px);
-}
-
-.dice-right {
-transform: rotateY(90deg) translateZ(36px);
-}
-
-.dice-left {
-transform: rotateY(-90deg) translateZ(36px);
-}
-
-.dice-top {
-transform: rotateX(90deg) translateZ(36px);
-}
-
-.dice-bottom {
-transform: rotateX(-90deg) translateZ(36px);
-}
-
-.dice-3d-rolling {
-animation: dice3dTumble 1.5s ease-in-out;
-}
-
-@keyframes dice3dTumble {
-0% {
-transform:
-translateY(0)
-rotateX(0deg)
-rotateY(0deg);
-}
-
-20% {
-transform:
-translateY(-30px)
-rotateX(180deg)
-rotateY(130deg);
-}
-
-45% {
-transform:
-translateY(-45px)
-rotateX(450deg)
-rotateY(360deg);
-}
-
-70% {
-transform:
-translateY(0)
-rotateX(720deg)
-rotateY(630deg);
-}
-
-83% {
-transform:
-translateY(-12px)
-rotateX(790deg)
-rotateY(700deg);
-}
-
-100% {
-transform: var(--dice-final-rotation);
-}
-}
-
-
-/* REAL 3D ROLLING DICE */
-
-.real-dice-stage {
-  width: 150px;
-  height: 145px;
-  margin: 12px auto 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 700px;
-}
-
-.real-dice {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  transform-style: preserve-3d;
-  transform: var(--dice-final-rotation);
-  transition: transform 0.4s ease-out;
-}
-
-.real-dice-face {
-  position: absolute;
-  width: 76px;
-  height: 76px;
-  box-sizing: border-box;
-  border: 2px solid #d1d5db;
-  border-radius: 13px;
-  background: linear-gradient(
-    145deg,
-    #ffffff,
-    #e5e7eb
-  );
-  box-shadow:
-    inset 0 0 12px rgba(255,255,255,0.9),
-    inset -5px -5px 10px rgba(0,0,0,0.08);
-  backface-visibility: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.real-dice .dice-front {
-  transform: translateZ(38px);
-}
-
-.real-dice .dice-back {
-  transform: rotateY(180deg) translateZ(38px);
-}
-
-.real-dice .dice-right {
-  transform: rotateY(90deg) translateZ(38px);
-}
-
-.real-dice .dice-left {
-  transform: rotateY(-90deg) translateZ(38px);
-}
-
-.real-dice .dice-top {
-  transform: rotateX(90deg) translateZ(38px);
-}
-
-.real-dice .dice-bottom {
-  transform: rotateX(-90deg) translateZ(38px);
-}
-
-/* DOTS ON EACH FACE */
-
-.dice-pips {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  width: 53px;
-  height: 53px;
-  align-items: center;
-  justify-items: center;
-}
-
-.dice-pip {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #17212f;
-  box-shadow: inset 1px 2px 2px rgba(0,0,0,0.3);
-}
-
-.dice-pip.empty {
-  visibility: hidden;
-}
-
-/* TUMBLING ANIMATION */
-
-.real-dice-rolling {
-  animation: realDiceTumble 1.5s
-    cubic-bezier(0.2, 0.7, 0.3, 1)
-    both;
-}
-
-@keyframes realDiceTumble {
-  0% {
-    transform:
-      rotateX(0deg)
-      rotateY(0deg)
-      rotateZ(0deg)
-      scale(1);
-  }
-
-  20% {
-    transform:
-      rotateX(220deg)
-      rotateY(160deg)
-      rotateZ(35deg)
-      scale(1.18);
-  }
-
-  45% {
-    transform:
-      rotateX(480deg)
-      rotateY(390deg)
-      rotateZ(-25deg)
-      scale(1.25);
-  }
-
-  70% {
-    transform:
-      rotateX(680deg)
-      rotateY(590deg)
-      rotateZ(15deg)
-      scale(1.12);
-  }
-
-  100% {
-    transform: var(--dice-final-rotation);
-  }
-}
-
-
-/* =========================================
-   FEELINGS & EMOTIONS — LARGE EMOJIS
-========================================= */
-
-.square .emotion-emoji {
-  font-size: clamp(40px, 5.5vw, 72px) !important;
-  line-height: 1 !important;
-  width: 100%;
-  height: 75%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  text-align: center;
-}
-
-
