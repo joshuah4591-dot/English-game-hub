@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-// ==================================================
-// ENGLISH GAME HUB — FOUR GAMES
-// ==================================================
+// ==============================================
+// ENGLISH GAME HUB — FOUR SNAKES & LADDERS GAMES
+// ==============================================
 
 const gameTopics = {
   pastTense: {
@@ -138,7 +138,7 @@ const gameTopics = {
       'You have nothing interesting to do all afternoon.',
       'Your dog is missing and you do not know where it is.',
       'Your teacher explains something, but you do not understand it.',
-      'You stayed awake all night and now you can hardly keep your eyes open.',
+      'You stayed awake all night and can hardly keep your eyes open.',
       'Nobody wants to play with you and you are sitting alone.',
       'Your friend gets an expensive present that you really wanted.',
       'You are resting on a comfortable chair beside the sea.',
@@ -170,17 +170,13 @@ const gameTopics = {
   }
 }
 
-// ==================================================
+// ==============================================
 // GAME SETTINGS
-// ==================================================
+// ==============================================
 
 const STEP_TIME = 550
 const ROLL_TIME = 1500
 const TRAP_SQUARE = 24
-
-// ==================================================
-// SNAKES, LADDERS AND TRAP
-// ==================================================
 
 const connections = [
   { type: 'ladder', from: 5, to: 12 },
@@ -223,24 +219,15 @@ const connections = [
     angle: -25
   },
 
-  {
-    type: 'trap',
-    from: TRAP_SQUARE,
-    to: 0
-  }
+  { type: 'trap', from: TRAP_SQUARE, to: 0 }
 ]
 
 const connectionAt = Object.fromEntries(
   connections.map(item => [item.from, item])
 )
 
-// ==================================================
-// BOARD NUMBERING
-// ==================================================
-
 const boardRows = Array.from({ length: 5 }, (_, index) => {
   const row = 4 - index
-
   const numbers = Array.from(
     { length: 6 },
     (_, col) => row * 6 + col + 1
@@ -260,9 +247,9 @@ function centerOf(number) {
   }
 }
 
-// ==================================================
+// ==============================================
 // BOARD ART
-// ==================================================
+// ==============================================
 
 function BoardArt() {
   return (
@@ -293,8 +280,8 @@ function BoardArt() {
           const len = Math.hypot(dx, dy)
           const px = -dy / len
           const py = dx / len
-
           const railWidth = 8
+
           const stepCount = Math.max(
             3,
             Math.floor(len / 25)
@@ -371,9 +358,9 @@ function BoardArt() {
   )
 }
 
-// ==================================================
+// ==============================================
 // 3D DICE
-// ==================================================
+// ==============================================
 
 function Dice3D({ value, rolling }) {
   const rotations = {
@@ -430,12 +417,12 @@ function Dice3D({ value, rolling }) {
   )
 }
 
-// ==================================================
+// ==============================================
 // ANSWER CELEBRATION
-// ==================================================
+// ==============================================
 
 function AnswerCelebration({ question, topic, onClose }) {
-  const confettiColors = [
+  const colors = [
     '#ffd700',
     '#ff6b6b',
     '#4ade80',
@@ -443,18 +430,16 @@ function AnswerCelebration({ question, topic, onClose }) {
     '#c084fc'
   ]
 
-  const originalQuestion = topic.sentences
+  const prompt = topic.sentences
     ? topic.sentences[question - 1]
     : topic.words[question - 1]
-
-  const correctAnswer = topic.answers[question - 1]
 
   return (
     <div
       className="celebration-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label="Teacher answer reveal"
+      aria-label="Answer reveal"
     >
       <div className="celebration-card">
         <div
@@ -471,8 +456,7 @@ function AnswerCelebration({ question, topic, onClose }) {
                 animationDuration: `${
                   2 + (i % 5) * 0.25
                 }s`,
-                backgroundColor:
-                  confettiColors[i % confettiColors.length]
+                backgroundColor: colors[i % colors.length]
               }}
             />
           ))}
@@ -503,7 +487,7 @@ function AnswerCelebration({ question, topic, onClose }) {
         </div>
 
         <div className="celebration-original">
-          {originalQuestion}
+          {prompt}
         </div>
 
         <div className="celebration-arrow">
@@ -516,7 +500,7 @@ function AnswerCelebration({ question, topic, onClose }) {
           </div>
 
           <div className="celebration-answer">
-            {correctAnswer}
+            {topic.answers[question - 1]}
           </div>
         </div>
 
@@ -535,9 +519,9 @@ function AnswerCelebration({ question, topic, onClose }) {
   )
 }
 
-// ==================================================
-// BACK TO START POPUP
-// ==================================================
+// ==============================================
+// BACK TO START TRAP
+// ==============================================
 
 function TrapPopup({ teamName, onContinue }) {
   return (
@@ -548,21 +532,12 @@ function TrapPopup({ teamName, onContinue }) {
       aria-label="Back to start trap"
     >
       <div className="trap-card">
-        <div className="trap-skull">
-          💀
-        </div>
+        <div className="trap-skull">💀</div>
 
-        <h2>
-          OH NO!
-        </h2>
+        <h2>OH NO!</h2>
+        <h3>BACK TO START!</h3>
 
-        <h3>
-          BACK TO START!
-        </h3>
-
-        <p>
-          {teamName} landed on the trap!
-        </p>
+        <p>{teamName} landed on the trap!</p>
 
         <div className="trap-arrow">
           24 ⟶ 🏁 START
@@ -579,9 +554,9 @@ function TrapPopup({ teamName, onContinue }) {
   )
 }
 
-// ==================================================
+// ==============================================
 // MAIN APPLICATION
-// ==================================================
+// ==============================================
 
 export default function App() {
   const [page, setPage] = useState('home')
@@ -608,17 +583,15 @@ export default function App() {
   const [winner, setWinner] = useState(null)
 
   const timers = useRef([])
+  const trapPending = useRef(false)
 
   const busy =
     rolling ||
     moving ||
     question !== null ||
     trapPopup ||
+    trapPending.current ||
     winner !== null
-
-  // ----------------------------------------------
-  // TIMER MANAGEMENT
-  // ----------------------------------------------
 
   function schedule(fn, ms) {
     const id = setTimeout(fn, ms)
@@ -636,12 +609,9 @@ export default function App() {
     }
   }, [])
 
-  // ----------------------------------------------
-  // RESET GAME
-  // ----------------------------------------------
-
   function resetGame() {
     cancelTimers()
+    trapPending.current = false
 
     setTeams([
       { name: 'Team 1', emoji: '🔴', position: 0 },
@@ -666,10 +636,6 @@ export default function App() {
     setPage('game')
   }
 
-  // ----------------------------------------------
-  // QUESTION MESSAGE
-  // ----------------------------------------------
-
   function getQuestionMessage(square) {
     if (topic.sentences) {
       return topic.sentences[square - 1]
@@ -679,7 +645,7 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // MOVE TEAM ONE SQUARE AT A TIME
+  // ANIMATED PLAYER MOVEMENT
   // ----------------------------------------------
 
   function moveTeam(from, to, onComplete) {
@@ -716,7 +682,7 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // ROLL DICE
+  // DICE
   // ----------------------------------------------
 
   function rollDice() {
@@ -736,6 +702,7 @@ export default function App() {
       if (destination === current) {
         setQuestion(current)
         setAnswerPopup(false)
+
         setMessage(
           `${teams[turn].name}, ${getQuestionMessage(current)}`
         )
@@ -754,7 +721,7 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // ADVANCE TO NEXT TEAM
+  // NEXT TURN
   // ----------------------------------------------
 
   function nextTurn(feedback, destination) {
@@ -775,7 +742,7 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // CORRECT / INCORRECT ANSWER
+  // ANSWER AND SPECIAL SQUARES
   // ----------------------------------------------
 
   function finishTurn(correct) {
@@ -783,7 +750,8 @@ export default function App() {
       question === null ||
       moving ||
       answerPopup ||
-      trapPopup
+      trapPopup ||
+      trapPending.current
     ) {
       return
     }
@@ -798,17 +766,17 @@ export default function App() {
     setQuestion(null)
     setAnswerPopup(false)
 
-    // BACK TO START TRAP
     if (special?.type === 'trap') {
+      trapPending.current = true
       setTrapPopup(true)
       setBoardShaking(true)
+
       setMessage(
         `💀 OH NO! ${teams[turn].name} landed on the Back to Start trap!`
       )
       return
     }
 
-    // SNAKES AND LADDERS
     if (special) {
       const destination = special.to
 
@@ -825,7 +793,6 @@ export default function App() {
           destination
         )
       })
-
       return
     }
 
@@ -833,14 +800,13 @@ export default function App() {
   }
 
   // ----------------------------------------------
-  // TRAP POPUP CONTINUE
+  // BACK TO START
   // ----------------------------------------------
 
   function activateTrap() {
     setTrapPopup(false)
+    setMoving(true)
 
-    // Give the board a final shake, then return
-    // the team directly to the starting area.
     schedule(() => {
       setTeams(prev =>
         prev.map((team, i) =>
@@ -855,6 +821,8 @@ export default function App() {
       const next = (turn + 1) % teams.length
 
       setTurn(next)
+      setMoving(false)
+      trapPending.current = false
 
       setMessage(
         `💀 Back to START! ${teams[next].name}, you're up!`
@@ -862,9 +830,9 @@ export default function App() {
     }, 450)
   }
 
-  // ==================================================
-  // WEBSITE
-  // ==================================================
+  // ==============================================
+  // RENDER
+  // ==============================================
 
   return (
     <div className="app">
@@ -938,7 +906,6 @@ export default function App() {
                 <span className="small-heading">
                   CHOOSE AN ADVENTURE
                 </span>
-
                 <h2>Classroom Games</h2>
               </div>
 
@@ -952,21 +919,16 @@ export default function App() {
               {/* GAME 1 */}
 
               <article className="game-card">
-                <div className="game-icon">
-                  🐍🪜
-                </div>
-
+                <div className="game-icon">🐍🪜</div>
                 <span className="game-category">
                   GRAMMAR
                 </span>
-
                 <h3>Snakes & Ladders</h3>
                 <h4>Past Tense</h4>
 
                 <p>
-                  Roll the dice and practise
-                  past-tense verbs such as
-                  go → went and eat → ate.
+                  Roll the dice and practise past-tense
+                  verbs such as go → went and eat → ate.
                 </p>
 
                 <button
@@ -980,14 +942,10 @@ export default function App() {
               {/* GAME 2 */}
 
               <article className="game-card">
-                <div className="game-icon">
-                  🔥❄️
-                </div>
-
+                <div className="game-icon">🔥❄️</div>
                 <span className="game-category">
                   VOCABULARY
                 </span>
-
                 <h3>Snakes & Ladders</h3>
                 <h4>Opposite Adjectives</h4>
 
@@ -1008,21 +966,16 @@ export default function App() {
               {/* GAME 3 */}
 
               <article className="game-card">
-                <div className="game-icon">
-                  📝🎲
-                </div>
-
+                <div className="game-icon">📝🎲</div>
                 <span className="game-category">
                   GRAMMAR
                 </span>
-
                 <h3>Snakes & Ladders</h3>
                 <h4>Gerunds & Infinitives</h4>
 
                 <p>
-                  Complete 30 sentences using
-                  gerunds (-ing) and infinitives
-                  (to + verb).
+                  Complete 30 sentences using gerunds
+                  (-ing) and infinitives (to + verb).
                 </p>
 
                 <button
@@ -1038,14 +991,10 @@ export default function App() {
               {/* GAME 4 */}
 
               <article className="game-card">
-                <div className="game-icon">
-                  😊😢😡
-                </div>
-
+                <div className="game-icon">😊😢😡</div>
                 <span className="game-category">
                   VOCABULARY
                 </span>
-
                 <h3>Snakes & Ladders</h3>
                 <h4>Feelings & Emotions</h4>
 
@@ -1065,48 +1014,31 @@ export default function App() {
               {/* FUTURE GAMES */}
 
               <article className="game-card">
-                <div className="game-icon">
-                  🏝️
-                </div>
-
+                <div className="game-icon">🏝️</div>
                 <h3>Treasure Island</h3>
-
-                <p>
-                  A new adventure is coming soon.
-                </p>
-
+                <p>A new adventure is coming soon.</p>
                 <span className="coming-soon">
                   Coming soon
                 </span>
               </article>
 
               <article className="game-card">
-                <div className="game-icon">
-                  🏁
-                </div>
-
+                <div className="game-icon">🏁</div>
                 <h3>English Race</h3>
-
                 <p>
                   Race your classmates to the finish line.
                 </p>
-
                 <span className="coming-soon">
                   Coming soon
                 </span>
               </article>
 
               <article className="game-card">
-                <div className="game-icon">
-                  💬
-                </div>
-
+                <div className="game-icon">💬</div>
                 <h3>Word Challenge</h3>
-
                 <p>
                   Build vocabulary with quick-fire questions.
                 </p>
-
                 <span className="coming-soon">
                   Coming soon
                 </span>
@@ -1118,13 +1050,9 @@ export default function App() {
           {/* CUSTOM GAMES */}
 
           <section className="custom-section">
-            <div className="custom-icon">
-              ✨
-            </div>
-
+            <div className="custom-icon">✨</div>
             <div>
               <h2>Make the game your own!</h2>
-
               <p>
                 Custom classroom games are on the way.
                 Choose your topic and challenge your students.
@@ -1138,14 +1066,11 @@ export default function App() {
             className="membership-section"
             id="membership"
           >
-            <h2>
-              Something for every classroom
-            </h2>
+            <h2>Something for every classroom</h2>
 
             <div className="membership-grid">
               <div>
                 <h3>🌟 Free</h3>
-
                 <p>
                   Play ready-made games and, when custom
                   games launch, create one per month.
@@ -1153,10 +1078,7 @@ export default function App() {
               </div>
 
               <div>
-                <h3>
-                  👑 Premium — coming later
-                </h3>
-
+                <h3>👑 Premium — coming later</h3>
                 <p>
                   More custom games, editing and
                   saved activities.
@@ -1165,16 +1087,9 @@ export default function App() {
             </div>
           </section>
 
-          {/* FOOTER */}
-
           <footer>
-            <strong>
-              🎲 English Game Hub
-            </strong>
-
-            <p>
-              Made for playful English learning.
-            </p>
+            <strong>🎲 English Game Hub</strong>
+            <p>Made for playful English learning.</p>
           </footer>
 
         </>
@@ -1194,8 +1109,6 @@ export default function App() {
             🌴
           </div>
 
-          {/* GAME HEADER */}
-
           <div className="game-top">
             <button
               className="back-button"
@@ -1212,13 +1125,8 @@ export default function App() {
                 THE CLASSROOM ADVENTURE
               </div>
 
-              <h1>
-                🐍 Snakes & Ladders 🪜
-              </h1>
-
-              <h2>
-                {topic.title}
-              </h2>
+              <h1>🐍 Snakes & Ladders 🪜</h1>
+              <h2>{topic.title}</h2>
 
               <p>
                 Roll the dice • Move your team •{' '}
@@ -1229,27 +1137,23 @@ export default function App() {
 
           <div className="game-layout">
 
-            {/* GAME BOARD */}
+            {/* BOARD */}
 
             <section className="board-shell">
-
               <div className="board-banner">
-                <span>
-                  🌟 RACE TO 30!
-                </span>
-
-                <span>
-                  🏆 FINISH LINE
-                </span>
+                <span>🌟 RACE TO 30!</span>
+                <span>🏆 FINISH LINE</span>
               </div>
 
               <div
                 className={`board ${
                   boardShaking ? 'trap-shaking' : ''
+                } ${
+                  gameType === 'feelings'
+                    ? 'feelings-board'
+                    : ''
                 }`}
               >
-
-                {/* BOARD SQUARES */}
 
                 <div className="board-grid">
                   {boardRows.flat().map(number => (
@@ -1274,13 +1178,16 @@ export default function App() {
                           <span className="trap-square-icon">
                             💀
                           </span>
-
-                          <strong>
-                            BACK TO START!
-                          </strong>
+                          <strong>BACK TO START!</strong>
                         </div>
                       ) : (
-                        <strong>
+                        <strong
+                          className={
+                            gameType === 'feelings'
+                              ? 'emotion-emoji'
+                              : ''
+                          }
+                        >
                           {topic.words[number - 1]}
                         </strong>
                       )}
@@ -1294,11 +1201,9 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* SNAKES AND LADDERS */}
-
                 <BoardArt />
 
-                {/* MOVING TEAM CHARACTERS */}
+                {/* TEAM CHARACTERS */}
 
                 <div className="explorer-layer">
                   {teams.map((team, i) => {
@@ -1334,14 +1239,11 @@ export default function App() {
                 <span> • </span>
                 💀 Avoid square 24!
               </div>
-
             </section>
 
-            {/* GAME CONTROLS */}
+            {/* CONTROLS */}
 
             <aside className="game-controls">
-
-              {/* CURRENT TEAM */}
 
               <section className="turn-panel">
                 <span className="panel-eyebrow">
@@ -1367,15 +1269,11 @@ export default function App() {
                         {team.emoji} {team.name}
                       </span>
 
-                      <b>
-                        {team.position}/30
-                      </b>
+                      <b>{team.position}/30</b>
                     </div>
                   ))}
                 </div>
               </section>
-
-              {/* 3D DICE */}
 
               <section className="dice-panel">
                 <span className="panel-eyebrow">
@@ -1406,13 +1304,11 @@ export default function App() {
                 </button>
               </section>
 
-              {/* GAME MESSAGE */}
-
               <section className="message-panel">
                 💬 {message}
               </section>
 
-              {/* QUESTION PANEL */}
+              {/* QUESTION */}
 
               <section className="question-panel">
                 <span className="panel-eyebrow">
@@ -1421,9 +1317,7 @@ export default function App() {
 
                 {question !== null ? (
                   <>
-                    <p>
-                      {topic.question}
-                    </p>
+                    <p>{topic.question}</p>
 
                     <div className="challenge-word">
                       {topic.sentences
@@ -1439,9 +1333,7 @@ export default function App() {
 
                     <button
                       className="reveal-button"
-                      onClick={() =>
-                        setAnswerPopup(true)
-                      }
+                      onClick={() => setAnswerPopup(true)}
                     >
                       ✨ REVEAL THE ANSWER! ✨
                     </button>
@@ -1449,18 +1341,14 @@ export default function App() {
                     <div className="answer-buttons">
                       <button
                         className="correct-button"
-                        onClick={() =>
-                          finishTurn(true)
-                        }
+                        onClick={() => finishTurn(true)}
                       >
                         ✓ CORRECT
                       </button>
 
                       <button
                         className="incorrect-button"
-                        onClick={() =>
-                          finishTurn(false)
-                        }
+                        onClick={() => finishTurn(false)}
                       >
                         ✕ INCORRECT
                       </button>
@@ -1479,23 +1367,13 @@ export default function App() {
                 )}
               </section>
 
-              {/* WINNER */}
-
               {winner !== null && (
                 <section className="winner-panel">
                   🏆
-
-                  <h2>
-                    {teams[winner].name} wins!
-                  </h2>
-
-                  <p>
-                    Fantastic teamwork!
-                  </p>
+                  <h2>{teams[winner].name} wins!</h2>
+                  <p>Fantastic teamwork!</p>
                 </section>
               )}
-
-              {/* RESTART */}
 
               <button
                 className="reset-button"
@@ -1507,19 +1385,13 @@ export default function App() {
             </aside>
           </div>
 
-          {/* ANSWER POPUP */}
-
           {answerPopup && question !== null && (
             <AnswerCelebration
               question={question}
               topic={topic}
-              onClose={() =>
-                setAnswerPopup(false)
-              }
+              onClose={() => setAnswerPopup(false)}
             />
           )}
-
-          {/* TRAP POPUP */}
 
           {trapPopup && (
             <TrapPopup
@@ -1531,9 +1403,60 @@ export default function App() {
         </main>
       )}
 
-      {/* TRAP STYLES */}
+      {/* ==========================================
+          EXTRA STYLING
+          LARGE EMOJIS + BACK TO START TRAP
+      ========================================== */}
 
       <style>{`
+
+        /* ======================================
+           FEELINGS & EMOTIONS — BIG EMOJIS
+        ====================================== */
+
+        .feelings-board .square {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .feelings-board .square .emotion-emoji {
+          position: absolute !important;
+          inset: 12% 3% 3% 3% !important;
+          width: 94% !important;
+          height: 85% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          font-size: clamp(35px, 5.5vw, 76px) !important;
+          line-height: 1 !important;
+          font-weight: normal !important;
+          text-align: center !important;
+          white-space: nowrap;
+          z-index: 1;
+        }
+
+        .feelings-board .square .square-number {
+          position: relative;
+          z-index: 3;
+        }
+
+        .feelings-board .trap-square .trap-square-content {
+          position: relative;
+          z-index: 2;
+        }
+
+        .feelings-hint {
+          font-size: 14px;
+          color: #6b7280;
+          font-weight: 600;
+        }
+
+        /* ======================================
+           BACK TO START SQUARE
+        ====================================== */
+
         .trap-square {
           background: linear-gradient(
             135deg,
@@ -1569,6 +1492,10 @@ export default function App() {
           color: #fff5c4 !important;
           text-shadow: 0 1px 3px #321018;
         }
+
+        /* ======================================
+           TRAP POPUP
+        ====================================== */
 
         .trap-overlay {
           position: fixed;
@@ -1660,11 +1587,9 @@ export default function App() {
           animation: trap-shake 0.5s ease-in-out infinite;
         }
 
-        .feelings-hint {
-          font-size: 14px;
-          color: #6b7280;
-          font-weight: 600;
-        }
+        /* ======================================
+           ANIMATIONS
+        ====================================== */
 
         @keyframes trap-pop {
           0% {
@@ -1714,6 +1639,7 @@ export default function App() {
             animation: none;
           }
         }
+
       `}</style>
 
     </div>
