@@ -4,7 +4,7 @@ import './App.css'
 
 // ==========================================
 // ENGLISH GAME HUB
-// FOUR SNAKES & LADDERS GAMES
+// FIVE SNAKES & LADDERS GAMES
 // ==========================================
 
 const gameTopics = {
@@ -163,6 +163,67 @@ const gameTopics = {
       'curious', 'guilty', 'confident', 'shy',
       'impatient', 'peaceful', 'annoyed',
       'amazed', 'relieved'
+    ]
+  },
+
+  // ========================================
+  // NEW GAME: ORDINAL NUMBERS
+  // ========================================
+
+  ordinalNumbers: {
+    title: 'Ordinal Numbers',
+    subtitle: 'Practise 1st to 10th!',
+    question: 'Ordinal Numbers Challenge!',
+    words: [
+      '1st', '2nd', '3rd', '4th', '5th',
+      '6th', '7th', '8th', '9th', '10th',
+      '3rd', '5th', '7th', '9th', '2nd',
+      '4th', '6th', '8th', '10th', '1st',
+      '2nd', '4th', '6th', '8th', '10th',
+      '1st', '3rd', '5th', '7th', '9th'
+    ],
+    sentences: [
+      'Say 1st in English.',
+      'Say 2nd in English.',
+      'Say 3rd in English.',
+      'Say 4th in English.',
+      'Say 5th in English.',
+      'Say 6th in English.',
+      'Say 7th in English.',
+      'Say 8th in English.',
+      'Say 9th in English.',
+      'Say 10th in English.',
+      'What comes after 2nd?',
+      'What comes before 6th?',
+      'What comes after 6th?',
+      'What comes before 10th?',
+      'What comes before 3rd?',
+      'What comes after 3rd?',
+      'What comes before 7th?',
+      'What comes after 7th?',
+      'What comes after 9th?',
+      'What comes before 2nd?',
+      'Change 2 into an ordinal number.',
+      'Change 4 into an ordinal number.',
+      'Change 6 into an ordinal number.',
+      'Change 8 into an ordinal number.',
+      'Change 10 into an ordinal number.',
+      'Spell 1st.',
+      'Spell 3rd.',
+      'Spell 5th.',
+      'Spell 7th.',
+      'Spell 9th.'
+    ],
+    answers: [
+      'first', 'second', 'third', 'fourth', 'fifth',
+      'sixth', 'seventh', 'eighth', 'ninth', 'tenth',
+      'third', 'fifth', 'seventh', 'ninth', 'second',
+      'fourth', 'sixth', 'eighth', 'tenth', 'first',
+      '2nd / second', '4th / fourth',
+      '6th / sixth', '8th / eighth',
+      '10th / tenth',
+      'first', 'third', 'fifth',
+      'seventh', 'ninth'
     ]
   }
 }
@@ -1151,6 +1212,35 @@ export default function App() {
                 <button
                   className="play-button"
                   onClick={() => startGame('feelings')}
+                >
+                  Play now →
+                </button>
+              </article>
+
+              {/* NEW FIFTH GAME */}
+
+              <article className="game-card">
+                <div className="game-icon">
+                  🥇🥈🥉
+                </div>
+
+                <span className="game-category">
+                  NUMBERS
+                </span>
+
+                <h3>Snakes & Ladders</h3>
+                <h4>Ordinal Numbers</h4>
+
+                <p>
+                  Practise ordinal numbers from 1st to 10th!
+                  Read, spell and find the correct positions.
+                </p>
+
+                <button
+                  className="play-button"
+                  onClick={() =>
+                    startGame('ordinalNumbers')
+                  }
                 >
                   Play now →
                 </button>
