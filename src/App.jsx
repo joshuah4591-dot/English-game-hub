@@ -4,7 +4,7 @@ import './App.css'
 
 // ==========================================
 // ENGLISH GAME HUB
-// FIVE SNAKES & LADDERS GAMES
+// SIX SNAKES & LADDERS GAMES
 // ==========================================
 
 const gameTopics = {
@@ -166,10 +166,6 @@ const gameTopics = {
     ]
   },
 
-  // ========================================
-  // NEW GAME: ORDINAL NUMBERS
-  // ========================================
-
   ordinalNumbers: {
     title: 'Ordinal Numbers',
     subtitle: 'Practise 1st to 10th!',
@@ -224,6 +220,35 @@ const gameTopics = {
       '10th / tenth',
       'first', 'third', 'fifth',
       'seventh', 'ninth'
+    ]
+  },
+
+  // ========================================
+  // NEW GAME: DIVISION FACTS
+  // ========================================
+
+  divisionFacts: {
+    title: 'Division Facts',
+    subtitle: 'Solve the division questions!',
+    question: 'What is the answer?',
+    words: [
+      '12 ÷ 2', '21 ÷ 3', '32 ÷ 4',
+      '45 ÷ 5', '36 ÷ 6', '49 ÷ 7',
+      '64 ÷ 8', '81 ÷ 9', '100 ÷ 10',
+      '24 ÷ 3', '18 ÷ 2', '40 ÷ 5',
+      '56 ÷ 7', '72 ÷ 8', '63 ÷ 9',
+      '30 ÷ 6', '42 ÷ 7', '54 ÷ 9',
+      '48 ÷ 6', '80 ÷ 10', '27 ÷ 3',
+      '35 ÷ 5', '16 ÷ 4', '24 ÷ 8',
+      '90 ÷ 9', '20 ÷ 2', '28 ÷ 4',
+      '60 ÷ 10', '36 ÷ 9', '72 ÷ 9'
+    ],
+    answers: [
+      '6', '7', '8', '9', '6', '7',
+      '8', '9', '10', '8', '9', '8',
+      '8', '9', '7', '5', '6', '6',
+      '8', '8', '9', '7', '4', '3',
+      '10', '10', '7', '6', '4', '8'
     ]
   }
 }
@@ -1217,8 +1242,6 @@ export default function App() {
                 </button>
               </article>
 
-              {/* NEW FIFTH GAME */}
-
               <article className="game-card">
                 <div className="game-icon">
                   🥇🥈🥉
@@ -1240,6 +1263,35 @@ export default function App() {
                   className="play-button"
                   onClick={() =>
                     startGame('ordinalNumbers')
+                  }
+                >
+                  Play now →
+                </button>
+              </article>
+
+              {/* NEW SIXTH GAME */}
+
+              <article className="game-card">
+                <div className="game-icon">
+                  ➗🔢
+                </div>
+
+                <span className="game-category">
+                  MATHEMATICS
+                </span>
+
+                <h3>Snakes & Ladders</h3>
+                <h4>Division Facts</h4>
+
+                <p>
+                  Practise division facts from the 2 to 10
+                  times tables. Solve 30 division challenges!
+                </p>
+
+                <button
+                  className="play-button"
+                  onClick={() =>
+                    startGame('divisionFacts')
                   }
                 >
                   Play now →
@@ -1471,7 +1523,7 @@ export default function App() {
                 {/* =================================
                     EXPLORERS
 
-                    RESTORED ORIGINAL POSITIONING
+                    ORIGINAL WORKING POSITIONING
 
                     The explorer's position comes
                     directly from team.position.
