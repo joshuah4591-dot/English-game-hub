@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 // ==========================================
-// ENGLISH GAME HUB — FOUR COMPLETE GAMES
+// ENGLISH GAME HUB
+// FOUR SNAKES & LADDERS GAMES
 // ==========================================
 
 const gameTopics = {
@@ -11,7 +12,6 @@ const gameTopics = {
     title: 'Past Tense',
     subtitle: 'Say the past tense!',
     question: 'What is the past simple of...',
-    instruction: 'Say the past tense of',
     words: [
       'Go', 'Eat', 'See', 'Play', 'Write', 'Buy',
       'Run', 'Drink', 'Make', 'Come', 'Take', 'Give',
@@ -34,7 +34,6 @@ const gameTopics = {
     title: 'Opposite Adjectives',
     subtitle: 'Say the opposite adjective!',
     question: 'What is the opposite of...',
-    instruction: 'Say the opposite of',
     words: [
       'Big', 'Hot', 'Happy', 'Tall', 'Fast', 'Clean',
       'Rich', 'Easy', 'Young', 'Strong', 'Loud',
@@ -59,7 +58,6 @@ const gameTopics = {
     title: 'Gerunds & Infinitives',
     subtitle: 'Complete the sentence!',
     question: 'Complete the sentence:',
-    instruction: 'Complete the sentence',
     words: [
       'Want', 'Enjoy', 'Decide', 'Finish', 'Hope',
       'Avoid', 'Promise', 'Keep', 'Need', 'Suggest',
@@ -117,7 +115,6 @@ const gameTopics = {
     title: 'Feelings & Emotions',
     subtitle: 'Guess the emotion!',
     question: 'How would you feel?',
-    instruction: 'Guess the emotion',
     words: [
       '😊', '😢', '😡', '🤩', '😬', '😨',
       '😎', '😳', '😲', '😐', '😟', '😕',
@@ -132,8 +129,8 @@ const gameTopics = {
       'You are going to Disneyland tomorrow!',
       'You are about to give a speech in front of the whole school.',
       'You hear a frightening noise outside your bedroom at night.',
-      'You win first prize in a school competition after working very hard.',
-      'You fall over in front of your classmates and everyone sees you.',
+      'You win first prize after working very hard.',
+      'You fall over in front of your classmates.',
       'Your friends organise a secret birthday party for you.',
       'You have nothing interesting to do all afternoon.',
       'Your dog is missing and you do not know where it is.',
@@ -145,11 +142,11 @@ const gameTopics = {
       'Your favourite football team loses the final match.',
       'Someone helps you when you are having a difficult time.',
       'You keep trying to solve a problem, but nothing works.',
-      'Things are difficult today, but you believe tomorrow will be better.',
-      'You hear some completely unexpected and unbelievable news.',
+      'Things are difficult, but you believe tomorrow will be better.',
+      'You hear completely unexpected and unbelievable news.',
       'You discover a mysterious locked box and want to know what is inside.',
       'You told a lie and now you feel bad about what you did.',
-      'You have studied hard and know you are ready for your English test.',
+      'You have studied hard and know you are ready for your test.',
       'You meet lots of new people and feel uncomfortable speaking.',
       'You have been waiting for your food for a very long time.',
       'You are sitting beside a quiet river, listening to the birds.',
@@ -171,15 +168,15 @@ const gameTopics = {
 }
 
 // ==========================================
-// GAME SETTINGS
+// SETTINGS
 // ==========================================
 
 const STEP_TIME = 550
 const ROLL_TIME = 1500
-const SPECIAL_TIME = 1800
+const SPECIAL_TIME = 1100
 const TRAP_SQUARE = 24
 
-const initialTeams = () => [
+const makeTeams = () => [
   { name: 'Team 1', emoji: '🔴', position: 0 },
   { name: 'Team 2', emoji: '🔵', position: 0 }
 ]
@@ -231,12 +228,18 @@ const connectionAt = Object.fromEntries(
 
 const boardRows = Array.from({ length: 5 }, (_, index) => {
   const row = 4 - index
+
   const numbers = Array.from(
     { length: 6 },
     (_, col) => row * 6 + col + 1
   )
+
   return row % 2 === 0 ? numbers : numbers.reverse()
 })
+
+// ==========================================
+// BOARD COORDINATES
+// ==========================================
 
 function centerOf(number) {
   if (number === 0) {
@@ -275,6 +278,7 @@ function BoardArt() {
             x: start.x + 25,
             y: start.y + 15
           }
+
           const b = {
             x: end.x + 25,
             y: end.y - 15
@@ -285,8 +289,12 @@ function BoardArt() {
           const len = Math.hypot(dx, dy)
           const px = -dy / len
           const py = dx / len
+
           const railWidth = 8
-          const stepCount = Math.max(3, Math.floor(len / 25))
+          const stepCount = Math.max(
+            3,
+            Math.floor(len / 25)
+          )
 
           return (
             <g key={from}>
@@ -422,7 +430,11 @@ function Dice3D({ value, rolling }) {
 // ANSWER CELEBRATION
 // ==========================================
 
-function AnswerCelebration({ question, topic, onClose }) {
+function AnswerCelebration({
+  question,
+  topic,
+  onClose
+}) {
   const colors = [
     '#ffd700',
     '#ff6b6b',
@@ -451,17 +463,27 @@ function AnswerCelebration({ question, topic, onClose }) {
               style={{
                 left: `${(i * 37) % 100}%`,
                 animationDelay: `${(i % 10) * -0.22}s`,
-                animationDuration: `${2 + (i % 5) * 0.25}s`,
+                animationDuration: `${
+                  2 + (i % 5) * 0.25
+                }s`,
                 backgroundColor: colors[i % colors.length]
               }}
             />
           ))}
         </div>
 
-        <div className="celebration-star star-one">⭐</div>
-        <div className="celebration-star star-two">✨</div>
-        <div className="celebration-star star-three">🌟</div>
-        <div className="celebration-star star-four">⭐</div>
+        <div className="celebration-star star-one">
+          ⭐
+        </div>
+        <div className="celebration-star star-two">
+          ✨
+        </div>
+        <div className="celebration-star star-three">
+          🌟
+        </div>
+        <div className="celebration-star star-four">
+          ⭐
+        </div>
 
         <div className="celebration-heading">
           🎉 ANSWER REVEAL! 🎉
@@ -475,12 +497,15 @@ function AnswerCelebration({ question, topic, onClose }) {
           {prompt}
         </div>
 
-        <div className="celebration-arrow">⬇</div>
+        <div className="celebration-arrow">
+          ⬇
+        </div>
 
         <div className="celebration-answer-box">
           <div className="celebration-answer-label">
             ✨ THE CORRECT ANSWER ✨
           </div>
+
           <div className="celebration-answer">
             {topic.answers[question - 1]}
           </div>
@@ -502,7 +527,7 @@ function AnswerCelebration({ question, topic, onClose }) {
 }
 
 // ==========================================
-// BACK TO START TRAP
+// TRAP POPUP
 // ==========================================
 
 function TrapPopup({ teamName, onContinue }) {
@@ -515,12 +540,16 @@ function TrapPopup({ teamName, onContinue }) {
     >
       <div className="trap-card">
         <div className="trap-skull">💀</div>
+
         <h2>OH NO!</h2>
         <h3>BACK TO START!</h3>
+
         <p>{teamName} landed on the trap!</p>
+
         <div className="trap-arrow">
           24 ⟶ 🏁 START
         </div>
+
         <button
           className="trap-continue"
           onClick={onContinue}
@@ -533,15 +562,16 @@ function TrapPopup({ teamName, onContinue }) {
 }
 
 // ==========================================
-// MAIN APPLICATION
+// MAIN APP
 // ==========================================
 
 export default function App() {
   const [page, setPage] = useState('home')
   const [gameType, setGameType] = useState('pastTense')
+
   const topic = gameTopics[gameType]
 
-  const [teams, setTeams] = useState(initialTeams)
+  const [teams, setTeams] = useState(makeTeams)
   const [turn, setTurn] = useState(0)
   const [dice, setDice] = useState(1)
   const [rolling, setRolling] = useState(false)
@@ -556,19 +586,17 @@ export default function App() {
     'Team 1, roll the dice to begin!'
   )
 
-  // Visual position is separate from the actual
-  // numbered square. This is the important fix.
-  const [visualPositions, setVisualPositions] = useState([
-    centerOf(0),
-    centerOf(0)
-  ])
-
-  const [specialMotion, setSpecialMotion] = useState(false)
-
-  const timers = useRef([])
+  // Remember the square before rolling.
   const turnStart = useRef(0)
-  const trapPending = useRef(false)
+
+  // Prevent extra clicks during animations.
   const actionLocked = useRef(false)
+
+  // Store timers so restart cancels animations.
+  const timers = useRef([])
+
+  // Movement mode controls transition duration.
+  const [movementMode, setMovementMode] = useState('normal')
 
   const busy =
     rolling ||
@@ -576,9 +604,8 @@ export default function App() {
     question !== null ||
     answerPopup ||
     trapPopup ||
-    trapPending.current ||
-    actionLocked.current ||
-    winner !== null
+    winner !== null ||
+    actionLocked.current
 
   function schedule(fn, ms) {
     const id = setTimeout(fn, ms)
@@ -597,42 +624,31 @@ export default function App() {
     }
   }, [])
 
-  function updatePosition(player, square) {
-    setTeams(prev =>
-      prev.map((team, i) =>
-        i === player
-          ? { ...team, position: square }
-          : team
-      )
-    )
-
-    setVisualPositions(prev =>
-      prev.map((pos, i) =>
-        i === player ? centerOf(square) : pos
-      )
-    )
-  }
+  // ==========================================
+  // RESET
+  // ==========================================
 
   function resetGame() {
     cancelTimers()
 
     actionLocked.current = false
-    trapPending.current = false
     turnStart.current = 0
 
-    setTeams(initialTeams())
-    setVisualPositions([centerOf(0), centerOf(0)])
+    setTeams(makeTeams())
     setTurn(0)
     setDice(1)
     setRolling(false)
     setMoving(false)
-    setSpecialMotion(false)
+    setMovementMode('normal')
     setQuestion(null)
     setAnswerPopup(false)
     setTrapPopup(false)
     setBoardShaking(false)
     setWinner(null)
-    setMessage('Team 1, roll the dice to begin!')
+
+    setMessage(
+      'Team 1, roll the dice to begin!'
+    )
   }
 
   function startGame(type) {
@@ -646,12 +662,31 @@ export default function App() {
       return topic.sentences[square - 1]
     }
 
-    return `${topic.instruction} "${topic.words[square - 1]}"!`
+    return (
+      `${topic.question} "${topic.words[square - 1]}"?`
+    )
   }
 
   // ==========================================
-  // NORMAL MOVEMENT
-  // Square by square.
+  // UPDATE PLAYER POSITION
+  //
+  // This uses the original working system:
+  // team.position controls explorer location.
+  // ==========================================
+
+  function updatePlayer(player, square) {
+    setTeams(prev =>
+      prev.map((team, i) =>
+        i === player
+          ? { ...team, position: square }
+          : team
+      )
+    )
+  }
+
+  // ==========================================
+  // NORMAL DICE MOVEMENT
+  // ONE SQUARE AT A TIME
   // ==========================================
 
   function moveTeam(from, to, onComplete) {
@@ -662,17 +697,18 @@ export default function App() {
       return
     }
 
-    const direction = to > from ? 1 : -1
-    const steps = Math.abs(to - from)
-
     setMoving(true)
     actionLocked.current = true
+    setMovementMode('normal')
+
+    const direction = to > from ? 1 : -1
+    const steps = Math.abs(to - from)
 
     for (let step = 1; step <= steps; step++) {
       const square = from + step * direction
 
       schedule(() => {
-        updatePosition(player, square)
+        updatePlayer(player, square)
 
         if (step === steps) {
           schedule(() => {
@@ -685,70 +721,40 @@ export default function App() {
   }
 
   // ==========================================
-  // SNAKE AND LADDER MOVEMENT
+  // SNAKE / LADDER MOVEMENT
   //
-  // Direct movement from the starting square
-  // to the destination square.
+  // RESTORED FROM THE WORKING VERSION.
   //
-  // This does NOT count through numbered squares.
+  // ONE position update.
+  // CSS animates directly to destination.
+  //
+  // No visualPositions.
+  // No frame-by-frame movement.
+  // No square-by-square counting.
   // ==========================================
 
   function moveSpecial(from, to, onComplete) {
     const player = turn
 
-    const start = centerOf(from)
-    const end = centerOf(to)
-
     setMoving(true)
-    setSpecialMotion(true)
     actionLocked.current = true
 
-    const frames = 60
-    const frameTime = SPECIAL_TIME / frames
+    // First, activate the special transition.
+    setMovementMode('special')
 
-    // The visual explorer travels directly
-    // from the first point to the second.
-    for (let frame = 1; frame <= frames; frame++) {
-      schedule(() => {
-        const progress = frame / frames
+    // Give the browser a moment to apply
+    // the longer transition.
+    schedule(() => {
+      // ONE update directly to the destination.
+      updatePlayer(player, to)
+    }, 60)
 
-        // Smooth acceleration and deceleration.
-        const eased =
-          progress < 0.5
-            ? 2 * progress * progress
-            : 1 - Math.pow(-2 * progress + 2, 2) / 2
-
-        const x =
-          start.x + (end.x - start.x) * eased
-
-        const y =
-          start.y + (end.y - start.y) * eased
-
-        setVisualPositions(prev =>
-          prev.map((pos, i) =>
-            i === player ? { x, y } : pos
-          )
-        )
-
-        if (frame === frames) {
-          // Update the real square only at
-          // the end of the special animation.
-          setTeams(prev =>
-            prev.map((team, i) =>
-              i === player
-                ? { ...team, position: to }
-                : team
-            )
-          )
-
-          schedule(() => {
-            setSpecialMotion(false)
-            setMoving(false)
-            onComplete()
-          }, 100)
-        }
-      }, frame * frameTime)
-    }
+    // Wait until sliding/climbing is complete.
+    schedule(() => {
+      setMoving(false)
+      setMovementMode('normal')
+      onComplete()
+    }, SPECIAL_TIME + 100)
   }
 
   // ==========================================
@@ -762,14 +768,20 @@ export default function App() {
 
     const current = teams[turn].position
     const result = Math.floor(Math.random() * 6) + 1
-    const destination = Math.min(30, current + result)
+    const destination = Math.min(
+      30,
+      current + result
+    )
 
-    // Save the starting square for incorrect answers.
+    // Save the starting square.
     turnStart.current = current
 
     setDice(result)
     setRolling(true)
-    setMessage(`${teams[turn].name} is rolling...`)
+
+    setMessage(
+      `${teams[turn].name} is rolling...`
+    )
 
     schedule(() => {
       setRolling(false)
@@ -777,17 +789,24 @@ export default function App() {
       if (destination === current) {
         setQuestion(current)
         setAnswerPopup(false)
+
         setMessage(
-          `${teams[turn].name}, ${getQuestionMessage(current)}`
+          `${teams[turn].name}, ${
+            getQuestionMessage(current)
+          }`
         )
+
         return
       }
 
       moveTeam(current, destination, () => {
         setQuestion(destination)
         setAnswerPopup(false)
+
         setMessage(
-          `${teams[turn].name}, ${getQuestionMessage(destination)}`
+          `${teams[turn].name}, ${
+            getQuestionMessage(destination)
+          }`
         )
       })
     }, ROLL_TIME)
@@ -800,7 +819,11 @@ export default function App() {
   function nextTurn(feedback, destination) {
     if (destination === 30) {
       setWinner(turn)
-      setMessage(`🏆 ${teams[turn].name} wins!`)
+
+      setMessage(
+        `🏆 ${teams[turn].name} wins!`
+      )
+
       setMoving(false)
       actionLocked.current = false
       return
@@ -818,7 +841,7 @@ export default function App() {
   }
 
   // ==========================================
-  // CORRECT AND INCORRECT ANSWERS
+  // ANSWER HANDLING
   // ==========================================
 
   function finishTurn(correct) {
@@ -826,8 +849,7 @@ export default function App() {
       question === null ||
       moving ||
       answerPopup ||
-      trapPopup ||
-      trapPending.current
+      trapPopup
     ) {
       return
     }
@@ -841,7 +863,9 @@ export default function App() {
 
     // ----------------------------------------
     // INCORRECT ANSWER
-    // Return to previous square.
+    //
+    // Return to the square occupied
+    // BEFORE rolling the dice.
     // ----------------------------------------
 
     if (!correct) {
@@ -849,7 +873,7 @@ export default function App() {
 
       setMessage(
         `❌ Incorrect! The answer is "${answer}". ` +
-        `Move back to square ${start}.`
+        `Move back to square ${start}!`
       )
 
       moveTeam(square, start, () => {
@@ -868,26 +892,25 @@ export default function App() {
 
     const feedback = 'Great answer!'
 
-    // Back to Start trap.
+    // Square 24 trap.
     if (special?.type === 'trap') {
-      trapPending.current = true
       actionLocked.current = true
 
       setTrapPopup(true)
       setBoardShaking(true)
 
       setMessage(
-        `💀 OH NO! ${teams[turn].name} landed ` +
-        `on the Back to Start trap!`
+        `💀 OH NO! ${teams[turn].name} ` +
+        `landed on the Back to Start trap!`
       )
+
       return
     }
 
     // ----------------------------------------
     // SNAKES AND LADDERS
     //
-    // Always call moveSpecial here.
-    // Never call moveTeam here.
+    // THIS USES THE ORIGINAL MOVEMENT.
     // ----------------------------------------
 
     if (
@@ -922,28 +945,29 @@ export default function App() {
   // ==========================================
 
   function activateTrap() {
-    if (!trapPending.current) return
+    if (!trapPopup) return
 
     setTrapPopup(false)
     setMoving(true)
     actionLocked.current = true
 
+    // The trap sends the player straight
+    // back to the starting position.
+    setMovementMode('special')
+
     schedule(() => {
-      updatePosition(turn, 0)
+      updatePlayer(turn, 0)
+    }, 60)
+
+    schedule(() => {
       setBoardShaking(false)
+      setMovementMode('normal')
 
-      const next = (turn + 1) % teams.length
-
-      setTurn(next)
-      setMoving(false)
-
-      trapPending.current = false
-      actionLocked.current = false
-
-      setMessage(
-        `💀 Back to START! ${teams[next].name}, you're up!`
+      nextTurn(
+        '💀 Back to START!',
+        0
       )
-    }, 450)
+    }, SPECIAL_TIME + 100)
   }
 
   // ==========================================
@@ -993,7 +1017,9 @@ export default function App() {
                 onClick={() => {
                   document
                     .getElementById('games')
-                    ?.scrollIntoView({ behavior: 'smooth' })
+                    ?.scrollIntoView({
+                      behavior: 'smooth'
+                    })
                 }}
               >
                 🐍 Choose a Snakes & Ladders Game
@@ -1008,12 +1034,16 @@ export default function App() {
             </div>
           </section>
 
-          <section className="games-section" id="games">
+          <section
+            className="games-section"
+            id="games"
+          >
             <div className="section-heading">
               <div>
                 <span className="small-heading">
                   CHOOSE AN ADVENTURE
                 </span>
+
                 <h2>Classroom Games</h2>
               </div>
 
@@ -1024,16 +1054,22 @@ export default function App() {
 
             <div className="game-grid">
               <article className="game-card">
-                <div className="game-icon">🐍🪜</div>
+                <div className="game-icon">
+                  🐍🪜
+                </div>
+
                 <span className="game-category">
                   GRAMMAR
                 </span>
+
                 <h3>Snakes & Ladders</h3>
                 <h4>Past Tense</h4>
+
                 <p>
-                  Roll the dice and practise past-tense
-                  verbs such as go → went and eat → ate.
+                  Roll the dice and practise
+                  past-tense verbs.
                 </p>
+
                 <button
                   className="play-button"
                   onClick={() => startGame('pastTense')}
@@ -1043,17 +1079,23 @@ export default function App() {
               </article>
 
               <article className="game-card">
-                <div className="game-icon">🔥❄️</div>
+                <div className="game-icon">
+                  🔥❄️
+                </div>
+
                 <span className="game-category">
                   VOCABULARY
                 </span>
+
                 <h3>Snakes & Ladders</h3>
                 <h4>Opposite Adjectives</h4>
+
                 <p>
                   Find the opposite adjectives!
                   Big → small, hot → cold,
-                  happy → sad, and more.
+                  and more.
                 </p>
+
                 <button
                   className="play-button"
                   onClick={() => startGame('opposites')}
@@ -1063,16 +1105,22 @@ export default function App() {
               </article>
 
               <article className="game-card">
-                <div className="game-icon">📝🎲</div>
+                <div className="game-icon">
+                  📝🎲
+                </div>
+
                 <span className="game-category">
                   GRAMMAR
                 </span>
+
                 <h3>Snakes & Ladders</h3>
                 <h4>Gerunds & Infinitives</h4>
+
                 <p>
-                  Complete 30 sentences using gerunds
-                  (-ing) and infinitives (to + verb).
+                  Complete sentences using
+                  gerunds and infinitives.
                 </p>
+
                 <button
                   className="play-button"
                   onClick={() =>
@@ -1084,16 +1132,22 @@ export default function App() {
               </article>
 
               <article className="game-card">
-                <div className="game-icon">😊😢😡</div>
+                <div className="game-icon">
+                  😊😢😡
+                </div>
+
                 <span className="game-category">
                   VOCABULARY
                 </span>
+
                 <h3>Snakes & Ladders</h3>
                 <h4>Feelings & Emotions</h4>
+
                 <p>
-                  Read everyday situations and guess
-                  the correct feeling or emotion!
+                  Read everyday situations and
+                  guess the correct emotion!
                 </p>
+
                 <button
                   className="play-button"
                   onClick={() => startGame('feelings')}
@@ -1103,31 +1157,49 @@ export default function App() {
               </article>
 
               <article className="game-card">
-                <div className="game-icon">🏝️</div>
+                <div className="game-icon">
+                  🏝️
+                </div>
+
                 <h3>Treasure Island</h3>
-                <p>A new adventure is coming soon.</p>
+
+                <p>
+                  A new adventure is coming soon.
+                </p>
+
                 <span className="coming-soon">
                   Coming soon
                 </span>
               </article>
 
               <article className="game-card">
-                <div className="game-icon">🏁</div>
+                <div className="game-icon">
+                  🏁
+                </div>
+
                 <h3>English Race</h3>
+
                 <p>
                   Race your classmates to the finish line.
                 </p>
+
                 <span className="coming-soon">
                   Coming soon
                 </span>
               </article>
 
               <article className="game-card">
-                <div className="game-icon">💬</div>
+                <div className="game-icon">
+                  💬
+                </div>
+
                 <h3>Word Challenge</h3>
+
                 <p>
-                  Build vocabulary with quick-fire questions.
+                  Build vocabulary with
+                  quick-fire questions.
                 </p>
+
                 <span className="coming-soon">
                   Coming soon
                 </span>
@@ -1136,9 +1208,13 @@ export default function App() {
           </section>
 
           <section className="custom-section">
-            <div className="custom-icon">✨</div>
+            <div className="custom-icon">
+              ✨
+            </div>
+
             <div>
               <h2>Make the game your own!</h2>
+
               <p>
                 Custom classroom games are on the way.
                 Choose your topic and challenge your students.
@@ -1150,11 +1226,14 @@ export default function App() {
             className="membership-section"
             id="membership"
           >
-            <h2>Something for every classroom</h2>
+            <h2>
+              Something for every classroom
+            </h2>
 
             <div className="membership-grid">
               <div>
                 <h3>🌟 Free</h3>
+
                 <p>
                   Play ready-made games and, when custom
                   games launch, create one per month.
@@ -1163,6 +1242,7 @@ export default function App() {
 
               <div>
                 <h3>👑 Premium — coming later</h3>
+
                 <p>
                   More custom games, editing and
                   saved activities.
@@ -1172,8 +1252,13 @@ export default function App() {
           </section>
 
           <footer>
-            <strong>🎲 English Game Hub</strong>
-            <p>Made for playful English learning.</p>
+            <strong>
+              🎲 English Game Hub
+            </strong>
+
+            <p>
+              Made for playful English learning.
+            </p>
           </footer>
         </>
       ) : (
@@ -1206,7 +1291,10 @@ export default function App() {
                 THE CLASSROOM ADVENTURE
               </div>
 
-              <h1>🐍 Snakes & Ladders 🪜</h1>
+              <h1>
+                🐍 Snakes & Ladders 🪜
+              </h1>
+
               <h2>{topic.title}</h2>
 
               <p>
@@ -1221,8 +1309,13 @@ export default function App() {
 
             <section className="board-shell">
               <div className="board-banner">
-                <span>🌟 RACE TO 30!</span>
-                <span>🏆 FINISH LINE</span>
+                <span>
+                  🌟 RACE TO 30!
+                </span>
+
+                <span>
+                  🏆 FINISH LINE
+                </span>
               </div>
 
               <div
@@ -1257,7 +1350,10 @@ export default function App() {
                           <span className="trap-square-icon">
                             💀
                           </span>
-                          <strong>BACK TO START!</strong>
+
+                          <strong>
+                            BACK TO START!
+                          </strong>
                         </div>
                       ) : (
                         <strong
@@ -1283,18 +1379,24 @@ export default function App() {
                 <BoardArt />
 
                 {/* =================================
-                    ANIMATED EXPLORERS
+                    EXPLORERS
 
-                    Uses visualPositions, not
-                    team.position.
+                    RESTORED ORIGINAL POSITIONING
 
-                    This allows direct diagonal
-                    snake and ladder movement.
+                    The explorer's position comes
+                    directly from team.position.
+
+                    Special movement changes this
+                    position ONCE, so the explorer
+                    slides directly between squares.
                 ================================= */}
 
                 <div className="explorer-layer">
                   {teams.map((team, i) => {
-                    const pos = visualPositions[i]
+                    const pos =
+                      team.position === 0
+                        ? { x: 50, y: 550 }
+                        : centerOf(team.position)
 
                     return (
                       <div
@@ -1303,9 +1405,14 @@ export default function App() {
                         style={{
                           left: `${pos.x / 6}%`,
                           top: `${pos.y / 5}%`,
-                          transition: specialMotion
-                            ? 'none'
-                            : undefined
+
+                          // Explicit transition
+                          // prevents old CSS rules
+                          // from overriding movement.
+                          transition:
+                            movementMode === 'special'
+                              ? `left ${SPECIAL_TIME}ms ease-in-out, top ${SPECIAL_TIME}ms ease-in-out`
+                              : `left ${STEP_TIME}ms ease-in-out, top ${STEP_TIME}ms ease-in-out`
                         }}
                         title={team.name}
                       >
@@ -1353,7 +1460,10 @@ export default function App() {
                       <span>
                         {team.emoji} {team.name}
                       </span>
-                      <b>{team.position}/30</b>
+
+                      <b>
+                        {team.position}/30
+                      </b>
                     </div>
                   ))}
                 </div>
@@ -1401,7 +1511,9 @@ export default function App() {
 
                 {question !== null ? (
                   <>
-                    <p>{topic.question}</p>
+                    <p>
+                      {topic.question}
+                    </p>
 
                     <div className="challenge-word">
                       {topic.sentences
@@ -1417,7 +1529,9 @@ export default function App() {
 
                     <button
                       className="reveal-button"
-                      onClick={() => setAnswerPopup(true)}
+                      onClick={() =>
+                        setAnswerPopup(true)
+                      }
                     >
                       ✨ REVEAL THE ANSWER! ✨
                     </button>
@@ -1425,14 +1539,18 @@ export default function App() {
                     <div className="answer-buttons">
                       <button
                         className="correct-button"
-                        onClick={() => finishTurn(true)}
+                        onClick={() =>
+                          finishTurn(true)
+                        }
                       >
                         ✓ CORRECT
                       </button>
 
                       <button
                         className="incorrect-button"
-                        onClick={() => finishTurn(false)}
+                        onClick={() =>
+                          finishTurn(false)
+                        }
                       >
                         ✕ INCORRECT
                       </button>
@@ -1454,8 +1572,14 @@ export default function App() {
               {winner !== null && (
                 <section className="winner-panel">
                   🏆
-                  <h2>{teams[winner].name} wins!</h2>
-                  <p>Fantastic teamwork!</p>
+
+                  <h2>
+                    {teams[winner].name} wins!
+                  </h2>
+
+                  <p>
+                    Fantastic teamwork!
+                  </p>
                 </section>
               )}
 
@@ -1472,7 +1596,9 @@ export default function App() {
             <AnswerCelebration
               question={question}
               topic={topic}
-              onClose={() => setAnswerPopup(false)}
+              onClose={() =>
+                setAnswerPopup(false)
+              }
             />
           )}
 
